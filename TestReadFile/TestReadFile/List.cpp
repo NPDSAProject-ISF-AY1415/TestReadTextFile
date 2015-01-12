@@ -99,7 +99,7 @@ ItemType List::get(int index){
 	if ((index >= 1) && (index <= size)){
 		//Move to node
 		Node *tmpNode = firstNode;
-		for (int i = 0; i <= index; i++){
+		for (int i = 0; i <= index - 2; i++){
 			tmpNode = tmpNode->next;
 		}
 		return tmpNode->item;
