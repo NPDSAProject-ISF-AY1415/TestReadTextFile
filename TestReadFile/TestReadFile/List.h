@@ -1,4 +1,6 @@
 // List.h - - Specification of List ADT (implemented using Pointers)
+#ifndef PTR_ARRAY
+#define PTR_ARRAY
 
 #include<string>
 #include<iostream>
@@ -43,3 +45,4 @@ public:
 	// display all the items in the list
 	void print();
 };
+#endif
