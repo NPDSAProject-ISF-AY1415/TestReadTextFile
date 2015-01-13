@@ -274,6 +274,8 @@ namespace ptrarr {
 		cout << "1) " << yellow << "View Songs in Database" << white << endl;
 		cout << "2) " << yellow << "Search for a song in database with name" << white << endl;
 		cout << "3) " << yellow << "View Performance Statistics" << white << endl;
+		cout << "4) " << yellow << "View All the Top Words found in Lyrics" << white << endl;
+		cout << "5) " << yellow << "Remove a song from the database" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}
@@ -346,12 +348,62 @@ namespace ptrarr {
 		printSeperator();
 		cout << red << "                           List Top Words in Lyrics" << endl;
 		printSeperator();
+		int modder = 1;		//To split print every 6 lines
 
 		for (int i = 1; i <= list.getLength(); i++){
+			if (modder % 6 == 0){
+				cout << endl;
+				modder = 1;
+			}
 			string wordString = list.get(i);
-			cout << "  " << white << wordString << "  |";
+			cout << "  " << white << wordString << yellow << "  |";
+			modder++;
 		}
 		cout << endl;
+	}
+
+	/*
+	Option 5: Remove an item from the music file
+	@param list List of Music File
+	*/
+	void removeMusicInfo(List &list){
+		printSeperator();
+		cout << red << "                              Remove Music Data" << endl;
+		printSeperator();
+		int size = list.getLength();
+		string indexToRemove;
+		cout << pink << "Enter index to remove (1 - " << size << "): ";
+		settextcolor(cyan);
+		cin >> indexToRemove;
+		settextcolor(white);
+
+		//Validation
+		if (!is_number(indexToRemove)){
+			cout << dark_red << "Please enter a positive number as the index" << white << endl;
+			return;
+		}
+		if (stoi(indexToRemove) > size){
+			cout << dark_red << "Entered Value is higher than the total size in the list" << white << endl;
+			return;
+		}
+
+		Music toRemove = parseMusicItem(list.get(stoi(indexToRemove)));
+		cout << red << "Are you sure you wish to remove the following music data from the list? " << endl;
+		toRemove.printMusicInfo();
+		cout << red << "To remove, Enter y or Y (default N): ";
+		string confirm;			//Check if user confirm
+		settextcolor(cyan);
+		cin >> confirm;
+		settextcolor(white);
+		cout << endl;
+		if (confirm[0] == 'y' || confirm[0] == 'Y'){
+			//Confirmed Remove
+			list.remove(stoi(indexToRemove));
+			cout << green << "Music Data (" << toRemove.getMTitle() << ") has been removed from the list!" << endl;
+		}
+		else {
+			cout << green << "Cancelled Removal of Music Data from list" << endl;
+		}
 	}
 
 	/*
@@ -423,7 +475,7 @@ namespace ptrarr {
 		if (mainMusicList.getLength() == 0){
 			settextcolor(red);
 			cout << "As Database do not have any music item, this section will quit." << endl;
-			return 0;
+			return -1;
 		}
 
 		//Main Menu
@@ -441,6 +493,7 @@ namespace ptrarr {
 				case 2: searchSong(mainMusicList); break;
 				case 3: printStats(); break;
 				case 4: listTopWords(mainWordList); break;
+				case 5: removeMusicInfo(mainMusicList); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;

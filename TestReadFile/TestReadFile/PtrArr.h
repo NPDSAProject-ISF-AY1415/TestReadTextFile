@@ -23,6 +23,7 @@ namespace ptrarr {
 	void searchSong(List &list);
 	void listAllSongs(List &list);
 	void listTopWords(List &list);
+	void removeMusicInfo(List &list);
 	void printStats();
 	int mainLoop();
 }
