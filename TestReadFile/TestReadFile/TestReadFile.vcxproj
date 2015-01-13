@@ -80,6 +80,7 @@
     <Text Include="mxm_dataset_train.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="concol.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Music.h" />
   </ItemGroup>

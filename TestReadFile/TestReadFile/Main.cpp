@@ -5,10 +5,33 @@
 #include "Music.h"
 #include <Windows.h>	//Console Utility
 #include <ctime>		//Elapsed Time
+#include "concol.h"		//Console Colors
+#include <algorithm>	//Find If
 
 using namespace std;
+using namespace eku;
 
 int musicInfoFileLength = 779074;
+
+/* Color Legend
+Yellow - Progress Bar/Status Message
+Pink - Input Message
+Cyan - Input/Numbers
+White - Progress Message
+Blue - String Message
+Red - Title
+*/
+
+/*
+Check if string is a positive number
+@param s String to check
+@return Whether it is a number or not
+*/
+bool is_number(const string& s)
+{
+	return !s.empty() && find_if(s.begin(),
+		s.end(), [](char c) { return !isdigit(c); }) == s.end();
+}
 
 /*
 Parses a music info string and return a music object from it
@@ -54,11 +77,12 @@ static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, u
 	float ratio = x / (float)n;
 	int   c = ratio * w;
 
-	cout << setw(3) << "Parsed: " << x << "/" << n << " [";
+	cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [";
 	for (int x = 0; x<c; x++) cout << "=";
 	for (int x = c; x<w; x++) cout << " ";
-	cout << "] " << (int)(ratio * 100) << "% Time Elapsed: " << setprecision(2) << fixed << elapsedSec;
+	cout << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
 	cout << " sec\r" << flush;
+	settextcolor(white);
 }
 
 /*
@@ -73,6 +97,7 @@ void readMatchFile(List &list, int count){
 	string str;
 	int internalCounter = 0;
 	int progressCounter = count;
+	settextcolor(white);
 	if (count > musicInfoFileLength){
 		cout << "Lines to read specified exceeds lines in file. Defaulting to read all" << endl;
 		count = -1;
@@ -81,6 +106,7 @@ void readMatchFile(List &list, int count){
 		progressCounter = musicInfoFileLength;
 		cout << "As the file is extremely large, this may take a couple of minutes..." << endl;
 	}
+	settextcolor(yellow);
 	cout << "===============" << endl;
 	cout << "Reading file..." << endl;
 	cout << "===============" << endl << endl;
@@ -104,21 +130,23 @@ void readMatchFile(List &list, int count){
 	}
 
 	loadbar(progressCounter, progressCounter, beginClock);
+	settextcolor(yellow);
 	cout << endl << "Finished Reading and Adding File..." << endl;
-	cout << "Total Lines Read: " << internalCounter << endl;
-	cout << "Total Music List Length: " << list.getLength() << endl << endl;
+	cout << yellow << "Total Lines Read: " << cyan << internalCounter << endl;
+	cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl << endl;
 }
 
 /*
 Prints out the main menu
 */
 void mainMenu(){
-	cout << "=======================" << endl;
-	cout << "       Main Menu" << endl;
-	cout << "=======================" << endl;
-	cout << "1) View Songs in Database" << endl;
-	cout << "2) Search for a song in database with name" << endl;
-	cout << "0) Quit" << endl;
+	cout << red << "=======================" << endl;
+	cout << yellow << "       Main Menu" << endl;
+	cout << red << "=======================" << endl;
+	settextcolor(white);
+	cout << "1) " << yellow << "View Songs in Database" << white << endl;
+	cout << "2) " << yellow << "Search for a song in database with name" << white << endl;
+	cout << "0) " << yellow << "Quit" << white << endl;
 }
 
 /*
@@ -126,12 +154,12 @@ Prints out a song's information
 @param musicData The Song Info Object
 */
 void printMusicInfo(Music musicData){
-	cout << "Million Song Track DB ID: " << musicData.getTid() << endl;
-	cout << "Million Song Track Artist: " << musicData.getTArtist() << endl;
-	cout << "Million Song Track Title: " << musicData.getTTitle() << endl;
-	cout << "musicXmatch Track DB ID: " << musicData.getMid() << endl;
-	cout << "musicXmatch Track Artist: " << musicData.getMArtist() << endl;
-	cout << "musicXmatch Track Title: " << musicData.getMTitle() << endl;
+	cout << white << "Million Song Track DB ID: " << blue << musicData.getTid() << endl;
+	cout << white << "Million Song Track Artist: " << blue << musicData.getTArtist() << endl;
+	cout << white << "Million Song Track Title: " << blue << musicData.getTTitle() << endl;
+	cout << white << "musicXmatch Track DB ID: " << blue << musicData.getMid() << endl;
+	cout << white << "musicXmatch Track Artist: " << blue << musicData.getMArtist() << endl;
+	cout << white << "musicXmatch Track Title: " << blue << musicData.getMTitle() << endl;
 }
 
 /*
@@ -139,20 +167,21 @@ Option 2 : Search for a song
 @param &list Linked List of the songs
 */
 void searchSong(List &list){
-	cout << "=========================" << endl;
-	cout << "     List Songs in DB" << endl;
-	cout << "=========================" << endl;
+	cout << red << "=========================" << endl;
+	cout << yellow << "     List Songs in DB" << endl;
+	cout << red << "=========================" << endl;
 	string target;
 	string empty;
 	getline(cin, empty);
-	cout << "Enter Exact Song Name: ";
+	cout << pink << "Enter Exact Song Name: " << cyan;
 	getline(cin, target);
+	settextcolor(white);
 
 	for (int i = 1; i <= list.getLength(); i++){
 		string res = list.get(i);
 		Music musIfo = parseMusicItem(res);
 		if (musIfo.getMTitle() == target){
-			cout << endl << "Music Found! Details of the music file is found below:" << endl;
+			cout << endl << yellow << "Music Found! Details of the music file is found below:" << endl;
 			printMusicInfo(musIfo);
 			cout << endl;
 			break;
@@ -166,9 +195,9 @@ Option 1 : List of all songs currently in the linked list
 @param &list Linked List of the songs
 */
 void listAllSongs(List &list){
-	cout << "=========================" << endl;
-	cout << "     List Songs in DB" << endl;
-	cout << "=========================" << endl;
+	cout << yellow << "=========================" << endl;
+	cout << red << "     List Songs in DB" << endl;
+	cout << yellow << "=========================" << endl;
 
 	//cout << "ITEMS IN LIST " << endl;
 	//list.print();
@@ -178,11 +207,11 @@ void listAllSongs(List &list){
 		string res = list.get(i);
 		//cout << "DEBUG STR OF INDEX " << i << ": " << res << endl;
 		Music musIfo = parseMusicItem(res);
-		cout << "=========================================================" << endl;
-		cout << "                 Song " << i << endl;
-		cout << "=========================================================" << endl;
+		cout << yellow << "=========================================================" << endl;
+		cout << red << "                 Song " << i << endl;
+		cout << yellow << "=========================================================" << endl;
 		printMusicInfo(musIfo);
-		cout << "=========================================================" << endl;
+		cout << yellow << "=========================================================" << endl;
 	}
 }
 
@@ -192,14 +221,19 @@ Main Method
 @return End Error Code
 */
 int main(){
+	//Initialization
 	SetConsoleTitle(TEXT("Read File Test Project"));
+	concolinit();
+
 	List mainList;
-	cout << "How many lines to read? (-1 to read all): ";
+	cout << pink << "How many lines to read? (-1 to read all): ";
+	settextcolor(cyan);
 	int count;
 	cin >> count;
 	readMatchFile(mainList, count);
 
 	if (mainList.getLength() == 0){
+		settextcolor(red);
 		cout << "As Database do not have any music item, the program will quit." << endl;
 		return 0;
 	}
@@ -207,15 +241,23 @@ int main(){
 	//Main Menu
 	while (true) {
 		mainMenu();
-		int selection;
+		string selection;
+		cout << pink << "Select a selection: ";
+		settextcolor(cyan);
 		cin >> selection;
-		switch (selection)
-		{
-		case 1: listAllSongs(mainList); break;
-		case 2: searchSong(mainList); break;
-		case 0: return 0;
-		//case 4: mainList.print(); break;
-		default: cout << "Invalid Selection." << endl; break;
+		settextcolor(white);
+		if (is_number(selection)){
+			switch (stoi(selection))
+			{
+			case 1: listAllSongs(mainList); break;
+			case 2: searchSong(mainList); break;
+			case 0: return 0;
+				//case 4: mainList.print(); break;
+			default: cout << dark_red << "Invalid Selection." << endl; break;
+			}
+		}
+		else {
+			cout << dark_red << "Selection must be an integer" << endl;
 		}
 	}
 	return 0;
