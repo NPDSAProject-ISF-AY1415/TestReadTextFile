@@ -13,6 +13,7 @@ using namespace std;
 using namespace eku;
 
 int musicInfoFileLength = 779074;
+double addElapsed = 0, displayElapsed = 0, sequSearchElapsed = 0;
 
 /* 
 Color Legend
@@ -149,8 +150,9 @@ void readMatchFile(List &list, int count){
 	clock_t finalEndClock = clock();
 
 	settextcolor(yellow);
+	addElapsed = calculateElapsed(beginClock, finalEndClock);
 	cout << endl << "Finished Reading and Adding File..." << endl;
-	cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << calculateElapsed(beginClock, finalEndClock) << " seconds" << endl;
+	cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addElapsed << " seconds" << endl;
 	cout << yellow << "Total Lines Read: " << cyan << internalCounter << endl;
 	cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl << endl;
 }
@@ -165,6 +167,7 @@ void mainMenu(){
 	settextcolor(white);
 	cout << "1) " << yellow << "View Songs in Database" << white << endl;
 	cout << "2) " << yellow << "Search for a song in database with name" << white << endl;
+	cout << "3) " << yellow << "View Performance Statistics" << white << endl;
 	cout << "0) " << yellow << "Quit" << white << endl;
 }
 
@@ -196,6 +199,8 @@ void searchSong(List &list){
 	getline(cin, target);
 	settextcolor(white);
 
+	clock_t start = clock();
+	bool found = false;
 	for (int i = 1; i <= list.getLength(); i++){
 		string res = list.get(i);
 		Music musIfo = parseMusicItem(res);
@@ -203,9 +208,16 @@ void searchSong(List &list){
 			cout << endl << yellow << "Music Found! Details of the music file is found below:" << endl;
 			printMusicInfo(musIfo);
 			cout << endl;
+			found = true;
 			break;
 		}
 	}
+	if (!found){
+		cout << endl << dark_red << "Unable to find a music file matching the search term" << endl;
+	}
+	clock_t end = clock();
+	sequSearchElapsed = calculateElapsed(start, end);
+	cout << yellow << "Elapsed Time for Sequential Search: " << cyan << setprecision(2) << fixed << sequSearchElapsed << " seconds." << endl;
 }
 
 
@@ -222,6 +234,7 @@ void listAllSongs(List &list){
 	//list.print();
 	//cout << "=============" << endl;
 	//cout << "DEBUG SIZE: " << list.getLength() << endl;
+	clock_t start = clock();
 	for (int i = 1; i <= list.getLength(); i++){
 		string res = list.get(i);
 		//cout << "DEBUG STR OF INDEX " << i << ": " << res << endl;
@@ -232,6 +245,26 @@ void listAllSongs(List &list){
 		printMusicInfo(musIfo);
 		cout << yellow << "=========================================================" << endl;
 	}
+	clock_t end = clock();
+	displayElapsed = calculateElapsed(start, end);
+	cout << yellow << "Elapsed Time for display: " << cyan << setprecision(2) << fixed << displayElapsed << " seconds." << endl;
+}
+
+void printStats(){
+	cout << yellow << "=========================================================" << endl;
+	if (addElapsed != 0)
+		cout << red << "|        Add        |       " << cyan << setprecision(2) << fixed << addElapsed << " Seconds |" << endl;
+	else
+		cout << red << "|        Add        |       " << cyan << "Untested |" << endl;
+	if (displayElapsed != 0)
+		cout << red << "|      Display      |       " << cyan << setprecision(2) << fixed << displayElapsed << " Seconds |" << endl;
+	else
+		cout << red << "|      Display      |       " << cyan << "Untested |" << endl;
+	if (sequSearchElapsed != 0)
+		cout << red << "|     Seq Search    |       " << cyan << setprecision(2) << fixed << sequSearchElapsed << " Seconds |" << endl;
+	else
+		cout << red << "|     Seq Search    |       " << cyan << "Untested |" << endl;
+	cout << yellow << "=========================================================" << endl;
 }
 
 
@@ -270,6 +303,7 @@ int main(){
 			{
 			case 1: listAllSongs(mainList); break;
 			case 2: searchSong(mainList); break;
+			case 3: printStats(); break;
 			case 0: return 0;
 				//case 4: mainList.print(); break;
 			default: cout << dark_red << "Invalid Selection." << endl; break;
