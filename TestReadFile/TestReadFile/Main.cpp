@@ -252,18 +252,30 @@ void listAllSongs(List &list){
 
 void printStats(){
 	cout << yellow << "=========================================================" << endl;
+	//Add
+	cout << red << " " << "        Add        " << yellow << "|" << red << "       " << cyan;
 	if (addElapsed != 0)
-		cout << red << "|        Add        |       " << cyan << setprecision(2) << fixed << addElapsed << " Seconds |" << endl;
+		cout << setprecision(2) << fixed << addElapsed << " Seconds ";
 	else
-		cout << red << "|        Add        |       " << cyan << "Untested |" << endl;
+		cout << "Untested ";
+	cout << endl;
+
+	//Display
+	cout << " " << red << "      Display      " << yellow << "|" << red << "       " << cyan;
 	if (displayElapsed != 0)
-		cout << red << "|      Display      |       " << cyan << setprecision(2) << fixed << displayElapsed << " Seconds |" << endl;
+		cout << setprecision(2) << fixed << displayElapsed << " Seconds ";
 	else
-		cout << red << "|      Display      |       " << cyan << "Untested |" << endl;
+		cout << "Untested ";
+	cout << endl;
+
+	//Seq Search
+	cout << " " << red << "     Seq Search    " << yellow << "|" << red << "       " << cyan;
 	if (sequSearchElapsed != 0)
-		cout << red << "|     Seq Search    |       " << cyan << setprecision(2) << fixed << sequSearchElapsed << " Seconds |" << endl;
+		cout << setprecision(2) << fixed << sequSearchElapsed << " Seconds ";
 	else
-		cout << red << "|     Seq Search    |       " << cyan << "Untested |" << endl;
+		cout << "Untested ";
+	cout << endl;
+
 	cout << yellow << "=========================================================" << endl;
 }
 
