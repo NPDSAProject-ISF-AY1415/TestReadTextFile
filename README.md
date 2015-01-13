@@ -6,5 +6,9 @@ This is basically a repo to code that reads a file from a text file and stores i
 **NOTE**  
 To get Sample Reference Files, Refer to https://github.com/NPDSAProject-ISF-AY1415/ReferenceAssets
 
+All Rights Reserved  
+Please do not download/fork or do anything with this repository
 
-This is a test
+
+© 2015 Ngee Ann Polytechnic School of Infocomm Technology P02 Group HW+Ken
+
