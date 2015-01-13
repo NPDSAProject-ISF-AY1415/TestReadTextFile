@@ -6,7 +6,9 @@ using namespace utility;
 
 namespace ptrarr {
 	int musicInfoFileLength = 779074;
-	double addMElapsed = 0, addWElapsed = 0, addLElapsed = 0, displayElapsed = 0, sequSearchElapsed = 0;
+	//All the counters
+	double addMElapsed = 0, addWElapsed = 0, addLElapsed = 0, displayMElapsed = 0, displayWElapsed = 0, sequSearchElapsed = 0;
+	double removeElapsed = 0;
 
 	/*
 	Color Legend
@@ -337,8 +339,8 @@ namespace ptrarr {
 			cout << yellow << "=========================================================" << endl;
 		}
 		clock_t end = clock();
-		displayElapsed = calculateElapsed(start, end);
-		cout << yellow << "Elapsed Time for display: " << cyan << setprecision(2) << fixed << displayElapsed << " seconds." << endl;
+		displayMElapsed = calculateElapsed(start, end);
+		cout << yellow << "Elapsed Time for displaying songs: " << cyan << setprecision(2) << fixed << displayMElapsed << " seconds." << endl;
 	}
 
 	/* Option 4: Display List of Top Words in Lyrics 
@@ -350,6 +352,7 @@ namespace ptrarr {
 		printSeperator();
 		int modder = 1;		//To split print every 6 lines
 
+		clock_t start = clock();
 		for (int i = 1; i <= list.getLength(); i++){
 			if (modder % 6 == 0){
 				cout << endl;
@@ -360,6 +363,9 @@ namespace ptrarr {
 			modder++;
 		}
 		cout << endl;
+		clock_t end = clock();
+		displayWElapsed = calculateElapsed(start, end);
+		cout << yellow << "Elapsed Time for displaying top words in lyrics: " << cyan << setprecision(2) << fixed << displayWElapsed << " seconds." << endl;
 	}
 
 	/*
@@ -394,8 +400,12 @@ namespace ptrarr {
 		cout << endl;
 		if (confirm[0] == 'y' || confirm[0] == 'Y'){
 			//Confirmed Remove
+			clock_t start = clock();
 			list.remove(stoi(indexToRemove));
 			cout << green << "Music Data (" << toRemove.getMTitle() << ") has been removed from the list!" << endl;
+			clock_t end = clock();
+			removeElapsed = calculateElapsed(start, end);
+			cout << yellow << "Elapsed Time for removing music: " << cyan << setprecision(2) << fixed << removeElapsed << " seconds." << endl;
 		}
 		else {
 			cout << green << "Cancelled Removal of Music Data from list" << endl;
@@ -433,20 +443,28 @@ namespace ptrarr {
 			cout << "Untested ";
 		cout << endl;
 
-		//Display
-		cout << " " << red << "                Display                " << yellow << "|" << red << "        " << cyan;
-		if (displayElapsed != 0)
-			cout << setprecision(2) << fixed << displayElapsed << " Seconds ";
+		//Display Music
+		cout << " " << red << "            Display (Music)            " << yellow << "|" << red << "        " << cyan;
+		if (displayMElapsed != 0)
+			cout << setprecision(2) << fixed << displayMElapsed << " Seconds ";
+		else
+			cout << "Untested ";
+		cout << endl;
+
+		//Display Top Words
+		cout << " " << red << "          Display (Top Words)          " << yellow << "|" << red << "        " << cyan;
+		if (displayWElapsed != 0)
+			cout << setprecision(2) << fixed << displayWElapsed << " Seconds ";
 		else
 			cout << "Untested ";
 		cout << endl;
 
 		//Remove
 		cout << " " << red << "              Remove Item              " << yellow << "|" << red << "        " << cyan;
-		if (displayElapsed != 0)
-			cout << setprecision(2) << fixed << "TODO" << " Seconds ";
+		if (removeElapsed != 0)
+			cout << setprecision(2) << fixed << removeElapsed << " Seconds ";
 		else
-			cout << "Untested (TODO) ";
+			cout << "Untested ";
 		cout << endl;
 
 		//Seq Search
