@@ -274,10 +274,10 @@ namespace ptrarr {
 		printSeperator();
 		settextcolor(white);
 		cout << "1) " << yellow << "View Songs in Database" << white << endl;
-		cout << "2) " << yellow << "Search for a song in database with name" << white << endl;
-		cout << "3) " << yellow << "View Performance Statistics" << white << endl;
-		cout << "4) " << yellow << "View All the Top Words found in Lyrics" << white << endl;
-		cout << "5) " << yellow << "Remove a song from the database" << white << endl;
+		cout << "2) " << yellow << "View All the Top Words found in Lyrics" << white << endl;
+		cout << "3) " << yellow << "Search for a song in database with name" << white << endl;
+		cout << "4) " << yellow << "Remove a song from the database" << white << endl;
+		cout << "5) " << yellow << "View Performance Statistics" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}
@@ -424,7 +424,7 @@ namespace ptrarr {
 		if (addMElapsed != 0)
 			cout << setprecision(2) << fixed << addMElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Add Music
@@ -432,7 +432,7 @@ namespace ptrarr {
 		if (addWElapsed != 0)
 			cout << setprecision(2) << fixed << addWElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Add Lyric
@@ -440,7 +440,7 @@ namespace ptrarr {
 		if (addLElapsed != 0)
 			cout << setprecision(2) << fixed << addLElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Display Music
@@ -448,7 +448,7 @@ namespace ptrarr {
 		if (displayMElapsed != 0)
 			cout << setprecision(2) << fixed << displayMElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Display Top Words
@@ -456,7 +456,7 @@ namespace ptrarr {
 		if (displayWElapsed != 0)
 			cout << setprecision(2) << fixed << displayWElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Remove
@@ -464,7 +464,7 @@ namespace ptrarr {
 		if (removeElapsed != 0)
 			cout << setprecision(2) << fixed << removeElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		//Seq Search
@@ -472,7 +472,7 @@ namespace ptrarr {
 		if (sequSearchElapsed != 0)
 			cout << setprecision(2) << fixed << sequSearchElapsed << " Seconds ";
 		else
-			cout << "Untested ";
+			cout << "  Untested ";
 		cout << endl;
 
 		printSeperator();
@@ -502,10 +502,10 @@ namespace ptrarr {
 				switch (stoi(selection))
 				{
 				case 1: listAllSongs(mainMusicList); break;
-				case 2: searchSong(mainMusicList); break;
-				case 3: printStats(); break;
-				case 4: listTopWords(mainWordList); break;
-				case 5: removeMusicInfo(mainMusicList); break;
+				case 2: listTopWords(mainWordList); break;
+				case 3: searchSong(mainMusicList); break;
+				case 4: removeMusicInfo(mainMusicList); break;
+				case 5: printStats(); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;
