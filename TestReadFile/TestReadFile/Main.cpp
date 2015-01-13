@@ -1,12 +1,13 @@
 #include <iostream>
 #include <fstream>		//File reading
-#include <iomanip>		//std::setw
 #include "List.h"
 #include "Music.h"
 #include <Windows.h>	//Console Utility
 #include <ctime>		//Elapsed Time
 #include "concol.h"		//Console Colors
+#include <iomanip>		//std::setw
 #include <algorithm>	//Find If
+
 
 using namespace std;
 using namespace eku;
@@ -22,6 +23,8 @@ Blue - String Message
 Red - Title
 */
 
+//START OF UTILITY
+
 /*
 Check if string is a positive number
 @param s String to check
@@ -32,6 +35,33 @@ bool is_number(const string& s)
 	return !s.empty() && find_if(s.begin(),
 		s.end(), [](char c) { return !isdigit(c); }) == s.end();
 }
+
+/* An Inline Progress Bar
+@param x Current Index
+@param n Total Number of Progress
+@param w Width of the bar
+@param beginClock Start of elapsed time
+*/
+static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20)
+{
+	if ((x != n) && (x % (n / 100 + 1) != 0) && n >= 2000) return;
+
+	//Get Elapsed Time
+	clock_t endClock = clock();
+	double elapsedSec = double(endClock - beginClock) / CLOCKS_PER_SEC;
+
+	float ratio = x / (float)n;
+	int   c = ratio * w;
+
+	cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [";
+	for (int x = 0; x<c; x++) cout << "=";
+	for (int x = c; x<w; x++) cout << " ";
+	cout << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
+	cout << " sec\r" << flush;
+	settextcolor(white);
+}
+
+//END OF UTILITY
 
 /*
 Parses a music info string and return a music object from it
@@ -58,31 +88,6 @@ Music parseMusicItem(string music){
 	Music musicResult(parsed[0], parsed[1], parsed[2], parsed[3], parsed[4], parsed[5]);
 
 	return musicResult;
-}
-
-/* An Inline Progress Bar
-@param x Current Index
-@param n Total Number of Progress
-@param w Width of the bar
-@param beginClock Start of elapsed time
-*/
-static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20)
-{
-	if ((x != n) && (x % (n / 100 + 1) != 0) && n >= 2000) return;
-
-	//Get Elapsed Time
-	clock_t endClock = clock();
-	double elapsedSec = double(endClock - beginClock) / CLOCKS_PER_SEC;
-
-	float ratio = x / (float)n;
-	int   c = ratio * w;
-
-	cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [";
-	for (int x = 0; x<c; x++) cout << "=";
-	for (int x = c; x<w; x++) cout << " ";
-	cout << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
-	cout << " sec\r" << flush;
-	settextcolor(white);
 }
 
 /*
