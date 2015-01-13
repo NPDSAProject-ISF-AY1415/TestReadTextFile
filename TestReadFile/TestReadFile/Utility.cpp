@@ -71,4 +71,14 @@ namespace utility {
 		}
 	}
 
+	/*
+	Get Input from String
+	@params storein Stores the input into this string
+	*/
+	void getStringInput(string &storein){
+		settextcolor(cyan);
+		cin >> storein;
+		settextcolor(white);
+	}
+
 }
