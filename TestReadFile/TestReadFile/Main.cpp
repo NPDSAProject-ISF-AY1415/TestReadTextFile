@@ -314,7 +314,7 @@ Main Method
 */
 int main(){
 	//Initialization
-	SetConsoleTitle(TEXT("Read File Test Project"));
+	SetConsoleTitle(TEXT("DSA Read File Test Project"));
 	concolinit();
 
 	printAscii();
