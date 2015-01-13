@@ -44,6 +44,9 @@
     <ClInclude Include="PtrArr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Lyric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="List.cpp">
@@ -62,6 +65,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lyric.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

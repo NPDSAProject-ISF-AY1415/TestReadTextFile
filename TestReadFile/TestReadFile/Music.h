@@ -16,19 +16,19 @@ private:
 	string mArtist;
 	string mTitle;
 public:
-	Music::Music(string id, string art, string title, string mid, string mart, string mtitl);
-	void Music::setTid(string id);
-	string Music::getTid();
-	void Music::setTArtist(string art);
-	string Music::getTArtist();
-	void Music::setTTitle(string title);
-	string Music::getTTitle();
-	void Music::setMid(string mid);
-	string Music::getMid();
-	void Music::setMArtist(string mart);
-	string Music::getMArtist();
-	void Music::setMTitle(string mtitl);
-	string Music::getMTitle();
+	Music(string id, string art, string title, string mid, string mart, string mtitl);
+	void setTid(string id);
+	string getTid();
+	void setTArtist(string art);
+	string getTArtist();
+	void setTTitle(string title);
+	string getTTitle();
+	void setMid(string mid);
+	string getMid();
+	void setMArtist(string mart);
+	string getMArtist();
+	void setMTitle(string mtitl);
+	string getMTitle();
 	void printMusicInfo();
 };
 #endif

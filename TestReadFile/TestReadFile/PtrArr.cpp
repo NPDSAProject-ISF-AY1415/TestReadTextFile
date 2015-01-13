@@ -6,7 +6,7 @@ using namespace utility;
 
 namespace ptrarr {
 	int musicInfoFileLength = 779074;
-	double addElapsed = 0, displayElapsed = 0, sequSearchElapsed = 0;
+	double addMElapsed = 0, addWElapsed = 0, addLElapsed = 0, displayElapsed = 0, sequSearchElapsed = 0;
 
 	/*
 	Color Legend
@@ -47,8 +47,134 @@ namespace ptrarr {
 
 	//END OF UTILITY
 
+	void parseFiles(List &musInfoList, List &wordList, List &lyricList){
+		cout << pink << "How many lines to read in Music File? (-1 to read all): ";
+		settextcolor(cyan);
+		int count;
+		cin >> count;
+		printSeperator();
+		cout << red << "                             Parsing Text Files..." << endl;
+		printSeperator();
+		readMatchFile(musInfoList, count);
+		readTopWords(wordList);
+		cout << pink << "How many lines to read in Lyric Count File? (-1 to read all): ";
+		settextcolor(cyan);
+		cin >> count;
+		readSongLyricCount(lyricList, count);
+		printSeperator();
+		cout << red << "                                Parse Completed" << endl;
+		printSeperator();
+		cout << endl;
+	}
+
 	/*
-	Reads the Text File
+	Reads the dataset train Text File for top words
+	@param &list Linked list to store the music data lines in
+	*/
+	void readTopWords(List &list){
+		bool verboseMode = false; //Enable Verbose Mode
+
+		ifstream file("mxm_dataset_train.txt");
+		string str;
+		int internalCounter = 0;
+		int progressCounter = 5000;	//Hardcoded
+		printSeperator();
+		//cout << red << "                        Reading and Parsing file..." << endl;
+		cout << red << "                          Parsing Songs Lyrics..." << endl;
+		printSeperator();
+		clock_t beginClock = clock();
+		while (getline(file, str)){
+
+			//Skip Comments
+			if (str[0] == '#') continue;
+
+			//Check if its top words
+			if (str[0] == '%'){
+				//Parse Top words based on comma
+				str.erase(0,1);
+				istringstream ss(str);
+				string topwrd;
+				while (getline(ss, topwrd, ',')){
+					if (verboseMode)
+						cout << topwrd << endl;
+
+					list.add(topwrd);
+					loadbar(internalCounter, progressCounter, beginClock);
+					//Increment counter
+					internalCounter++;
+				}
+				break;
+			}
+		}
+
+		loadbar(progressCounter, progressCounter, beginClock);
+		clock_t finalEndClock = clock();
+
+		settextcolor(yellow);
+		addWElapsed = calculateElapsed(beginClock, finalEndClock);
+		cout << endl << "Finished Parsing Song Lyrics." << endl;
+		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addWElapsed << " seconds" << endl;
+		cout << yellow << "Total Words Read: " << cyan << internalCounter << endl;
+		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl << endl;
+	}
+
+	/*
+	Reads the dataset train Text File for song lyrics count
+	@param &list Linked list to store the music data lines in
+	*/
+	void readSongLyricCount(List &list, int count){
+		bool verboseMode = false; //Enable Verbose Mode
+
+		ifstream file("mxm_dataset_train.txt");
+		string str;
+		int internalCounter = 0;
+		int fullCounter = 210519;		//Hardcoded
+		int progressCounter = count;	//Hardcoded
+
+		settextcolor(white);
+		if (count > musicInfoFileLength){
+			cout << "Lines to read specified exceeds lines in file. Defaulting to read all" << endl;
+			count = -1;
+		}
+		if (count == -1){
+			progressCounter = fullCounter;
+			cout << "As the file is extremely large, this may take a couple of minutes..." << endl;
+		}
+		settextcolor(yellow);
+
+		printSeperator();
+		//cout << red << "                        Reading and Parsing file..." << endl;
+		cout << red << "                       Parsing Songs Lyrics Count..." << endl;
+		printSeperator();
+		clock_t beginClock = clock();
+		while (getline(file, str)){
+
+			//Skip Comments
+			if (str[0] == '#' || str[0] == '%') continue;
+
+			else{
+				if (internalCounter >= progressCounter) break;
+
+				list.add(str);
+				loadbar(internalCounter, progressCounter, beginClock);
+				//Increment counter
+				internalCounter++;
+			}
+		}
+
+		loadbar(progressCounter, progressCounter, beginClock);
+		clock_t finalEndClock = clock();
+
+		settextcolor(yellow);
+		addLElapsed = calculateElapsed(beginClock, finalEndClock);
+		cout << endl << "Finished Parsing Song Lyrics Count." << endl;
+		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addLElapsed << " seconds" << endl;
+		cout << yellow << "Total Words Read: " << cyan << internalCounter << endl;
+		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl << endl;
+	}
+
+	/*
+	Reads the 779k Match Text File
 	@param &list Linked list to store the music data lines in
 	@param count How many lines in the text file to process
 	*/
@@ -70,7 +196,7 @@ namespace ptrarr {
 		}
 		settextcolor(yellow);
 		printSeperator();
-		cout << red << "                        Reading and Parsing file..." << endl;
+		cout << red << "                          Parsing Song Information..." << endl;
 		printSeperator();
 		clock_t beginClock = clock();
 		while (getline(file, str)){
@@ -96,9 +222,9 @@ namespace ptrarr {
 		clock_t finalEndClock = clock();
 
 		settextcolor(yellow);
-		addElapsed = calculateElapsed(beginClock, finalEndClock);
-		cout << endl << "Finished Reading and Adding File..." << endl;
-		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addElapsed << " seconds" << endl;
+		addMElapsed = calculateElapsed(beginClock, finalEndClock);
+		cout << endl << "Finished Parsing and Adding Song Information." << endl;
+		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addMElapsed << " seconds" << endl;
 		cout << yellow << "Total Lines Read: " << cyan << internalCounter << endl;
 		cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl << endl;
 	}
@@ -196,10 +322,26 @@ namespace ptrarr {
 		printSeperator();
 		cout << red << "                         Pointer-based Array Statistics" << endl;
 		printSeperator();
-		//Add
-		cout << red << " " << "                  Add                  " << yellow << "|" << red << "        " << cyan;
-		if (addElapsed != 0)
-			cout << setprecision(2) << fixed << addElapsed << " Seconds ";
+		//Add Music
+		cout << red << " " << "              Add (Music)              " << yellow << "|" << red << "        " << cyan;
+		if (addMElapsed != 0)
+			cout << setprecision(2) << fixed << addMElapsed << " Seconds ";
+		else
+			cout << "Untested ";
+		cout << endl;
+
+		//Add Music
+		cout << red << " " << "              Add (Words)              " << yellow << "|" << red << "        " << cyan;
+		if (addWElapsed != 0)
+			cout << setprecision(2) << fixed << addWElapsed << " Seconds ";
+		else
+			cout << "Untested ";
+		cout << endl;
+
+		//Add Lyric
+		cout << red << " " << "              Add (Lyric)              " << yellow << "|" << red << "        " << cyan;
+		if (addLElapsed != 0)
+			cout << setprecision(2) << fixed << addLElapsed << " Seconds ";
 		else
 			cout << "Untested ";
 		cout << endl;
@@ -237,14 +379,10 @@ namespace ptrarr {
 	@return Error Code (-1 for continue)
 	*/
 	int mainLoop(){
-		List mainList;
-		cout << pink << "How many lines to read? (-1 to read all): ";
-		settextcolor(cyan);
-		int count;
-		cin >> count;
-		readMatchFile(mainList, count);
+		List mainMusicList, mainWordList, mainLyricList;
+		parseFiles(mainMusicList, mainWordList, mainLyricList);
 
-		if (mainList.getLength() == 0){
+		if (mainMusicList.getLength() == 0){
 			settextcolor(red);
 			cout << "As Database do not have any music item, this section will quit." << endl;
 			return 0;
@@ -261,8 +399,8 @@ namespace ptrarr {
 			if (is_number(selection)){
 				switch (stoi(selection))
 				{
-				case 1: listAllSongs(mainList); break;
-				case 2: searchSong(mainList); break;
+				case 1: listAllSongs(mainMusicList); break;
+				case 2: searchSong(mainMusicList); break;
 				case 3: printStats(); break;
 				case 9: return -1;
 				case 0: return 0;
