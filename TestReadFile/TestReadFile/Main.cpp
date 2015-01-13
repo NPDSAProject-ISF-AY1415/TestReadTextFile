@@ -14,7 +14,8 @@ using namespace eku;
 
 int musicInfoFileLength = 779074;
 
-/* Color Legend
+/* 
+Color Legend
 Yellow - Progress Bar/Status Message
 Pink - Input Message
 Cyan - Input/Numbers
@@ -36,6 +37,16 @@ bool is_number(const string& s)
 		s.end(), [](char c) { return !isdigit(c); }) == s.end();
 }
 
+/*
+Calculate Elapsed Time in Seconds
+@param start Start of the clock
+@param end The time where it is clocked
+@return Elapsed time in seconds
+*/
+double calculateElapsed(clock_t start, clock_t end){
+	return double(end - start) / CLOCKS_PER_SEC;
+}
+
 /* An Inline Progress Bar
 @param x Current Index
 @param n Total Number of Progress
@@ -48,7 +59,7 @@ static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, u
 
 	//Get Elapsed Time
 	clock_t endClock = clock();
-	double elapsedSec = double(endClock - beginClock) / CLOCKS_PER_SEC;
+	double elapsedSec = calculateElapsed(beginClock, endClock);
 
 	float ratio = x / (float)n;
 	int   c = ratio * w;
@@ -135,8 +146,11 @@ void readMatchFile(List &list, int count){
 	}
 
 	loadbar(progressCounter, progressCounter, beginClock);
+	clock_t finalEndClock = clock();
+
 	settextcolor(yellow);
 	cout << endl << "Finished Reading and Adding File..." << endl;
+	cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << calculateElapsed(beginClock, finalEndClock) << " seconds" << endl;
 	cout << yellow << "Total Lines Read: " << cyan << internalCounter << endl;
 	cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl << endl;
 }
