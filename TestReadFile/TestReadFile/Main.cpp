@@ -1,9 +1,14 @@
 #include <iostream>
-#include <fstream>
+#include <fstream>		//File reading
+#include <iomanip>		//std::setw
 #include "List.h"
 #include "Music.h"
+#include <Windows.h>	//Console Utility
+#include <ctime>		//Elapsed Time
 
 using namespace std;
+
+int musicInfoFileLength = 779074;
 
 /*
 Parses a music info string and return a music object from it
@@ -32,22 +37,59 @@ Music parseMusicItem(string music){
 	return musicResult;
 }
 
+/* An Inline Progress Bar
+@param x Current Index
+@param n Total Number of Progress
+@param w Width of the bar
+@param beginClock Start of elapsed time
+*/
+static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20)
+{
+	if ((x != n) && (x % (n / 100 + 1) != 0) && n >= 2000) return;
+
+	//Get Elapsed Time
+	clock_t endClock = clock();
+	double elapsedSec = double(endClock - beginClock) / CLOCKS_PER_SEC;
+
+	float ratio = x / (float)n;
+	int   c = ratio * w;
+
+	cout << setw(3) << "Parsed: " << x << "/" << n << " [";
+	for (int x = 0; x<c; x++) cout << "=";
+	for (int x = c; x<w; x++) cout << " ";
+	cout << "] " << (int)(ratio * 100) << "% Time Elapsed: " << setprecision(2) << fixed << elapsedSec;
+	cout << " sec\r" << flush;
+}
+
 /*
 Reads the Text File
 @param &list Linked list to store the music data lines in
 @param count How many lines in the text file to process
 */
 void readMatchFile(List &list, int count){
+	bool verboseMode = false; //Enable Verbose Mode
+
 	ifstream file("mxm_779k_matches.txt");
 	string str;
 	int internalCounter = 0;
+	int progressCounter = count;
+	if (count > musicInfoFileLength){
+		cout << "Lines to read specified exceeds lines in file. Defaulting to read all" << endl;
+		count = -1;
+	}
+	if (count == -1){
+		progressCounter = musicInfoFileLength;
+		cout << "As the file is extremely large, this may take a couple of minutes..." << endl;
+	}
 	cout << "===============" << endl;
 	cout << "Reading file..." << endl;
 	cout << "===============" << endl << endl;
+	clock_t beginClock = clock();
 	while (getline(file, str)){
-		if (internalCounter >= count)
+		if (internalCounter >= progressCounter)
 			break;
-		cout << str << endl; 
+		if (verboseMode)
+			cout << str << endl; 
 
 		//Check if string is a comment
 		if (str[0] == '#'){
@@ -56,12 +98,14 @@ void readMatchFile(List &list, int count){
 			//Parse Music Details Line
 			list.add(str);
 		}
-
+		loadbar(internalCounter, progressCounter, beginClock);
 		//Increment counter
 		internalCounter++;
 	}
 
+	loadbar(progressCounter, progressCounter, beginClock);
 	cout << endl << "Finished Reading and Adding File..." << endl;
+	cout << "Total Lines Read: " << internalCounter << endl;
 	cout << "Total Music List Length: " << list.getLength() << endl << endl;
 }
 
@@ -148,8 +192,9 @@ Main Method
 @return End Error Code
 */
 int main(){
+	SetConsoleTitle(TEXT("Read File Test Project"));
 	List mainList;
-	cout << "How many lines to read?: ";
+	cout << "How many lines to read? (-1 to read all): ";
 	int count;
 	cin >> count;
 	readMatchFile(mainList, count);
