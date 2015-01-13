@@ -33,11 +33,11 @@ namespace eku
 	};
 #endif //CONCOL
 
-	HANDLE std_con_out;
+	extern HANDLE std_con_out;
 	//Standard Output Handle
-	bool colorprotect = false;
+	extern bool colorprotect;
 	//If colorprotect is true, background and text colors will never be the same
-	concol textcol, backcol, deftextcol, defbackcol;
+	extern concol textcol, backcol, deftextcol, defbackcol;
 	/*textcol - current text color
 	backcol - current back color
 	deftextcol - original text color

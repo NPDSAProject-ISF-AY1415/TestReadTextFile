@@ -1,16 +1,16 @@
-#include <iostream>
+#include <iostream>		//String
 #include <fstream>		//File reading
-#include "List.h"
-#include "Music.h"
 #include <Windows.h>	//Console Utility
 #include <ctime>		//Elapsed Time
 #include "concol.h"		//Console Colors
+#include "List.h"
+#include "Music.h"
+#include "Utility.h"
 #include <iomanip>		//std::setw
-#include <algorithm>	//Find If
-
 
 using namespace std;
 using namespace eku;
+using namespace utility;
 
 int musicInfoFileLength = 779074;
 double addElapsed = 0, displayElapsed = 0, sequSearchElapsed = 0;
@@ -26,34 +26,6 @@ Red - Title
 */
 
 //START OF UTILITY
-
-/*
-Check if string is a positive number
-@param s String to check
-@return Whether it is a number or not
-*/
-bool is_number(const string& s)
-{
-	return !s.empty() && find_if(s.begin(),
-		s.end(), [](char c) { return !isdigit(c); }) == s.end();
-}
-
-/*
-Prints the seperator (===) (78 chars)
-*/
-void printSeperator(){
-	cout << yellow << "===============================================================================" << white << endl;
-}
-
-/*
-Calculate Elapsed Time in Seconds
-@param start Start of the clock
-@param end The time where it is clocked
-@return Elapsed time in seconds
-*/
-double calculateElapsed(clock_t start, clock_t end){
-	return double(end - start) / CLOCKS_PER_SEC;
-}
 
 /* An Inline Progress Bar
 @param x Current Index
