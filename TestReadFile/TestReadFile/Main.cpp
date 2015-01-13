@@ -55,41 +55,6 @@ static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, u
 //END OF UTILITY
 
 /*
-Parses a music info string and return a music object from it
-@param music Music Info String
-@return Music Object
-*/
-Music parseMusicItem(string music){
-	string parsed[6];
-	
-	string tmpToken;
-	size_t pos = 0;
-	string delimiter = "<SEP>";
-	int column = 0;
-
-	while ((pos = music.find(delimiter)) != string::npos) {
-			tmpToken = music.substr(0, pos);
-		parsed[column] = tmpToken;
-		music.erase(0, pos + delimiter.length());
-		column++;
-	}
-	tmpToken = music;
-	parsed[5] = tmpToken;
-
-	Music musicResult(parsed[0], parsed[1], parsed[2], parsed[3], parsed[4], parsed[5]);
-
-	return musicResult;
-}
-
-void printAscii(){
-	ifstream file("ascii.txt");
-	string print;
-	while (getline(file, print)){
-		cout << print << endl;
-	}
-}
-
-/*
 Reads the Text File
 @param &list Linked list to store the music data lines in
 @param count How many lines in the text file to process
@@ -162,6 +127,7 @@ void mainMenu(){
 Prints out a song's information
 @param musicData The Song Info Object
 */
+/*
 void printMusicInfo(Music musicData){
 	cout << white << "Million Song Track DB ID: " << blue << musicData.getTid() << endl;
 	cout << white << "Million Song Track Artist: " << blue << musicData.getTArtist() << endl;
@@ -169,7 +135,7 @@ void printMusicInfo(Music musicData){
 	cout << white << "musicXmatch Track DB ID: " << blue << musicData.getMid() << endl;
 	cout << white << "musicXmatch Track Artist: " << blue << musicData.getMArtist() << endl;
 	cout << white << "musicXmatch Track Title: " << blue << musicData.getMTitle() << endl;
-}
+}*/
 
 /*
 Option 2 : Search for a song
@@ -193,7 +159,8 @@ void searchSong(List &list){
 		Music musIfo = parseMusicItem(res);
 		if (musIfo.getMTitle() == target){
 			cout << endl << yellow << "Music Found! Details of the music file is found below:" << endl;
-			printMusicInfo(musIfo);
+			//printMusicInfo(musIfo);
+			musIfo.printMusicInfo();
 			cout << endl;
 			found = true;
 			break;
@@ -229,7 +196,8 @@ void listAllSongs(List &list){
 		cout << yellow << "=========================================================" << endl;
 		cout << red << "                 Song " << i << endl;
 		cout << yellow << "=========================================================" << endl;
-		printMusicInfo(musIfo);
+		//printMusicInfo(musIfo);
+		musIfo.printMusicInfo();
 		cout << yellow << "=========================================================" << endl;
 	}
 	clock_t end = clock();

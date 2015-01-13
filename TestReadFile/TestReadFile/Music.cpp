@@ -1,7 +1,6 @@
-#include <string>
-#include <iostream>
 #include "Music.h"
 using namespace std;
+using namespace eku;
 
 Music::Music(string id, string art, string title, string mid, string mart, string mtitl){
 	tid = id;
@@ -23,3 +22,15 @@ void Music::setMArtist(string mart){ mArtist = mart; }
 string Music::getMArtist(){ return mArtist; }
 void Music::setMTitle(string mtitl){ mTitle = mtitl; }
 string Music::getMTitle(){ return mTitle; }
+
+/*
+Prints out a song's information
+*/
+void Music::printMusicInfo(){
+	cout << white << "Million Song Track DB ID: " << blue << tid << endl;
+	cout << white << "Million Song Track Artist: " << blue << tArtist << endl;
+	cout << white << "Million Song Track Title: " << blue << tTitle << endl;
+	cout << white << "musicXmatch Track DB ID: " << blue << mxmid << endl;
+	cout << white << "musicXmatch Track Artist: " << blue << mArtist << endl;
+	cout << white << "musicXmatch Track Title: " << blue << mTitle << endl;
+}

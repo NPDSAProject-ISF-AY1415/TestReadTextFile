@@ -1,5 +1,9 @@
+#ifndef MUSIC
+#define MUSIC
+
 #include <string>
 #include <iostream>
+#include "concol.h"
 
 using namespace std;
 
@@ -25,4 +29,6 @@ public:
 	string Music::getMArtist();
 	void Music::setMTitle(string mtitl);
 	string Music::getMTitle();
+	void printMusicInfo();
 };
+#endif
