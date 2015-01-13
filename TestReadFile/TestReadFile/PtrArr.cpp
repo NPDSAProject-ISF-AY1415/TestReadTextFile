@@ -45,8 +45,42 @@ namespace ptrarr {
 		settextcolor(white);
 	}
 
+	/*
+	Parsing each Lyric String File
+	@param lyricStr String of the Lyric
+	@return Created Lyric File
+	*/
+	Lyric parseLyricData(string lyricStr){
+		istringstream lyrStream(lyricStr);
+		string token;
+		int ct = 0;	//0 - Track ID, 1 - MusicXMatch ID, >2 Word Count
+		Lyric l;
+		while (getline(lyrStream, token, ',')){
+			if (ct == 0){
+				l.setTrackID(token);
+				ct++;
+			}
+			else if (ct == 1){
+				l.setMusicXMatchID(token);
+				ct++;
+			}
+
+			//Parse Words
+			l.addWordAndCount(token);
+		}
+
+		return l;
+	}
+
 	//END OF UTILITY
 
+
+	/*
+	Method that calls the other file parsing methods
+	@param musInfoList List for Music Information
+	@param wordList List for Top Words in Lyrics
+	@param lyricList List for lyrics in Songs
+	*/
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList){
 		cout << pink << "How many lines to read in Music File? (-1 to read all): ";
 		settextcolor(cyan);
@@ -169,8 +203,8 @@ namespace ptrarr {
 		addLElapsed = calculateElapsed(beginClock, finalEndClock);
 		cout << endl << "Finished Parsing Song Lyrics Count." << endl;
 		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addLElapsed << " seconds" << endl;
-		cout << yellow << "Total Words Read: " << cyan << internalCounter << endl;
-		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl << endl;
+		cout << yellow << "Total Lyric Lines Read: " << cyan << internalCounter << endl;
+		cout << yellow << "Total Lyric List Length: " << cyan << list.getLength() << endl << endl;
 	}
 
 	/*
@@ -281,7 +315,6 @@ namespace ptrarr {
 		cout << yellow << "Elapsed Time for Sequential Search: " << cyan << setprecision(2) << fixed << sequSearchElapsed << " seconds." << endl;
 	}
 
-
 	/*
 	Option 1 : List of all songs currently in the linked list
 	@param &list Linked List of the songs
@@ -291,28 +324,34 @@ namespace ptrarr {
 		cout << red << "                                List All Songs" << endl;
 		printSeperator();
 
-		//DEBUG
-		//cout << "ITEMS IN LIST " << endl;
-		//list.print();
-		//cout << "=============" << endl;
-		//cout << "DEBUG SIZE: " << list.getLength() << endl;
-		//END DEBUG
-
 		clock_t start = clock();
 		for (int i = 1; i <= list.getLength(); i++){
 			string res = list.get(i);
-			//cout << "DEBUG STR OF INDEX " << i << ": " << res << endl;
 			Music musIfo = parseMusicItem(res);
 			cout << yellow << "=========================================================" << endl;
 			cout << red << "                 Song " << i << endl;
 			cout << yellow << "=========================================================" << endl;
-			//printMusicInfo(musIfo);
 			musIfo.printMusicInfo();
 			cout << yellow << "=========================================================" << endl;
 		}
 		clock_t end = clock();
 		displayElapsed = calculateElapsed(start, end);
 		cout << yellow << "Elapsed Time for display: " << cyan << setprecision(2) << fixed << displayElapsed << " seconds." << endl;
+	}
+
+	/* Option 4: Display List of Top Words in Lyrics 
+	@param list List of Top Words
+	*/
+	void listTopWords(List &list){
+		printSeperator();
+		cout << red << "                           List Top Words in Lyrics" << endl;
+		printSeperator();
+
+		for (int i = 1; i <= list.getLength(); i++){
+			string wordString = list.get(i);
+			cout << "  " << white << wordString << "  |";
+		}
+		cout << endl;
 	}
 
 	/*
@@ -373,7 +412,6 @@ namespace ptrarr {
 		printSeperator();
 	}
 
-
 	/*
 	Main Pointer Based Array Code
 	@return Error Code (-1 for continue)
@@ -402,6 +440,7 @@ namespace ptrarr {
 				case 1: listAllSongs(mainMusicList); break;
 				case 2: searchSong(mainMusicList); break;
 				case 3: printStats(); break;
+				case 4: listTopWords(mainWordList); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;
