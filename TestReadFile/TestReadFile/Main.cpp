@@ -37,9 +37,7 @@ int main(){
 		mainMenu();
 		string selection;
 		cout << pink << "Select a selection: ";
-		settextcolor(cyan);
-		cin >> selection;
-		settextcolor(white);
+		getStringInput(selection);
 		if (is_number(selection)){
 			switch (stoi(selection))
 			{

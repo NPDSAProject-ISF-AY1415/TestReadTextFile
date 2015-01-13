@@ -17,5 +17,6 @@ namespace utility{
 	double calculateElapsed(clock_t start, clock_t end);
 	Music parseMusicItem(string music);
 	void printAscii();
+	void getStringInput(string &storein);
 }
 #endif

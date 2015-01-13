@@ -373,9 +373,7 @@ namespace ptrarr {
 		int size = list.getLength();
 		string indexToRemove;
 		cout << pink << "Enter index to remove (1 - " << size << "): ";
-		settextcolor(cyan);
-		cin >> indexToRemove;
-		settextcolor(white);
+		getStringInput(indexToRemove);
 
 		//Validation
 		if (!is_number(indexToRemove)){
@@ -391,10 +389,8 @@ namespace ptrarr {
 		cout << red << "Are you sure you wish to remove the following music data from the list? " << endl;
 		toRemove.printMusicInfo();
 		cout << red << "To remove, Enter y or Y (default N): ";
-		string confirm;			//Check if user confirm
-		settextcolor(cyan);
-		cin >> confirm;
-		settextcolor(white);
+		string confirm; 
+		getStringInput(confirm);			//Check if user confirm
 		cout << endl;
 		if (confirm[0] == 'y' || confirm[0] == 'Y'){
 			//Confirmed Remove
@@ -483,9 +479,7 @@ namespace ptrarr {
 			mainPtrArrMenu();
 			string selection;
 			cout << pink << "Select a selection: ";
-			settextcolor(cyan);
-			cin >> selection;
-			settextcolor(white);
+			getStringInput(selection);
 			if (is_number(selection)){
 				switch (stoi(selection))
 				{
