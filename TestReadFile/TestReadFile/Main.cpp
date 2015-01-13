@@ -39,6 +39,13 @@ bool is_number(const string& s)
 }
 
 /*
+Prints the seperator (===) (78 chars)
+*/
+void printSeperator(){
+	cout << yellow << "===============================================================================" << white << endl;
+}
+
+/*
 Calculate Elapsed Time in Seconds
 @param start Start of the clock
 @param end The time where it is clocked
@@ -54,7 +61,7 @@ double calculateElapsed(clock_t start, clock_t end){
 @param w Width of the bar
 @param beginClock Start of elapsed time
 */
-static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20)
+static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 25)
 {
 	if ((x != n) && (x % (n / 100 + 1) != 0) && n >= 2000) return;
 
@@ -65,10 +72,10 @@ static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, u
 	float ratio = x / (float)n;
 	int   c = ratio * w;
 
-	cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [";
+	cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [" << red;
 	for (int x = 0; x<c; x++) cout << "=";
 	for (int x = c; x<w; x++) cout << " ";
-	cout << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
+	cout << yellow << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
 	cout << " sec\r" << flush;
 	settextcolor(white);
 }
@@ -102,6 +109,14 @@ Music parseMusicItem(string music){
 	return musicResult;
 }
 
+void printAscii(){
+	ifstream file("ascii.txt");
+	string print;
+	while (getline(file, print)){
+		cout << print << endl;
+	}
+}
+
 /*
 Reads the Text File
 @param &list Linked list to store the music data lines in
@@ -124,9 +139,9 @@ void readMatchFile(List &list, int count){
 		cout << "As the file is extremely large, this may take a couple of minutes..." << endl;
 	}
 	settextcolor(yellow);
-	cout << "===============" << endl;
-	cout << "Reading file..." << endl;
-	cout << "===============" << endl << endl;
+	printSeperator();
+	cout << red << "                        Reading and Parsing file..." << endl;
+	printSeperator();
 	clock_t beginClock = clock();
 	while (getline(file, str)){
 		if (internalCounter >= progressCounter)
@@ -161,9 +176,9 @@ void readMatchFile(List &list, int count){
 Prints out the main menu
 */
 void mainMenu(){
-	cout << red << "=======================" << endl;
-	cout << yellow << "       Main Menu" << endl;
-	cout << red << "=======================" << endl;
+	printSeperator();
+	cout << red << "                                  Main Menu" << endl;
+	printSeperator();
 	settextcolor(white);
 	cout << "1) " << yellow << "View Songs in Database" << white << endl;
 	cout << "2) " << yellow << "Search for a song in database with name" << white << endl;
@@ -189,9 +204,9 @@ Option 2 : Search for a song
 @param &list Linked List of the songs
 */
 void searchSong(List &list){
-	cout << red << "=========================" << endl;
-	cout << yellow << "     List Songs in DB" << endl;
-	cout << red << "=========================" << endl;
+	printSeperator();
+	cout << yellow << "                                 Search Songs" << endl;
+	printSeperator();
 	string target;
 	string empty;
 	getline(cin, empty);
@@ -226,9 +241,9 @@ Option 1 : List of all songs currently in the linked list
 @param &list Linked List of the songs
 */
 void listAllSongs(List &list){
-	cout << yellow << "=========================" << endl;
-	cout << red << "     List Songs in DB" << endl;
-	cout << yellow << "=========================" << endl;
+	printSeperator();
+	cout << red << "                                List All Songs" << endl;
+	printSeperator();
 
 	//cout << "ITEMS IN LIST " << endl;
 	//list.print();
@@ -250,10 +265,15 @@ void listAllSongs(List &list){
 	cout << yellow << "Elapsed Time for display: " << cyan << setprecision(2) << fixed << displayElapsed << " seconds." << endl;
 }
 
+/*
+Option 3 : Prints out the statistics (timing/mem usage) of list
+*/
 void printStats(){
-	cout << yellow << "=========================================================" << endl;
+	printSeperator();
+	cout << red << "                         Pointer-based Array Statistics" << endl;
+	printSeperator();
 	//Add
-	cout << red << " " << "        Add        " << yellow << "|" << red << "       " << cyan;
+	cout << red << " " << "                  Add                  " << yellow << "|" << red << "        " << cyan;
 	if (addElapsed != 0)
 		cout << setprecision(2) << fixed << addElapsed << " Seconds ";
 	else
@@ -261,22 +281,30 @@ void printStats(){
 	cout << endl;
 
 	//Display
-	cout << " " << red << "      Display      " << yellow << "|" << red << "       " << cyan;
+	cout << " " << red << "                Display                " << yellow << "|" << red << "        " << cyan;
 	if (displayElapsed != 0)
 		cout << setprecision(2) << fixed << displayElapsed << " Seconds ";
 	else
 		cout << "Untested ";
 	cout << endl;
 
+	//Remove
+	cout << " " << red << "              Remove Item              " << yellow << "|" << red << "        " << cyan;
+	if (displayElapsed != 0)
+		cout << setprecision(2) << fixed << "TODO" << " Seconds ";
+	else
+		cout << "Untested (TODO) ";
+	cout << endl;
+
 	//Seq Search
-	cout << " " << red << "     Seq Search    " << yellow << "|" << red << "       " << cyan;
+	cout << " " << red << "           Sequential Search           " << yellow << "|" << red << "        " << cyan;
 	if (sequSearchElapsed != 0)
 		cout << setprecision(2) << fixed << sequSearchElapsed << " Seconds ";
 	else
 		cout << "Untested ";
 	cout << endl;
 
-	cout << yellow << "=========================================================" << endl;
+	printSeperator();
 }
 
 
@@ -288,6 +316,9 @@ int main(){
 	//Initialization
 	SetConsoleTitle(TEXT("Read File Test Project"));
 	concolinit();
+
+	printAscii();
+	cout << endl;
 
 	List mainList;
 	cout << pink << "How many lines to read? (-1 to read all): ";

@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="ascii.txt" />
     <Text Include="mxm_779k_matches.txt" />
     <Text Include="mxm_dataset_train.txt" />
   </ItemGroup>

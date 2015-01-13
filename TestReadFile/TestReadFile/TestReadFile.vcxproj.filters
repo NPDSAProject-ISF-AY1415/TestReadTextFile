@@ -24,6 +24,9 @@
     <Text Include="mxm_dataset_train.txt">
       <Filter>Resources</Filter>
     </Text>
+    <Text Include="ascii.txt">
+      <Filter>Resources</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List.h">
