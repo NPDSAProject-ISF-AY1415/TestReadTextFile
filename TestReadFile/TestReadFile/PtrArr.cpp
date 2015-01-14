@@ -84,7 +84,6 @@ namespace ptrarr {
 	@param lyricList List for lyrics in Songs
 	*/
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList){
-		cout << "Total Virtual Memory Before Parse: " << getVMUsed() << endl;
 		cout << pink << "How many lines to read in Music File? (-1 to read all): ";
 		settextcolor(cyan);
 		int count;
@@ -102,8 +101,6 @@ namespace ptrarr {
 		cout << red << "                                Parse Completed" << endl;
 		printSeperator();
 		cout << endl;
-
-		cout << "Total Virtual Memory After Parse: " << getVMUsed() << endl;
 	}
 
 	/*
@@ -122,8 +119,6 @@ namespace ptrarr {
 		cout << red << "                          Parsing Songs Lyrics..." << endl;
 		printSeperator();
 		clock_t beginClock = clock();
-
-		cout << "Total Virtual Memory Before Add: " << getVMUsed() << endl;
 
 		while (getline(file, str)){
 
@@ -155,9 +150,6 @@ namespace ptrarr {
 		settextcolor(yellow);
 		addWElapsed = calculateElapsed(beginClock, finalEndClock);
 		cout << endl << "Finished Parsing Song Lyrics." << endl;
-
-		cout << "Total Virtual Memory After Add: " << getVMUsed() << endl;
-
 		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addWElapsed << " seconds" << endl;
 		cout << yellow << "Total Words Read: " << cyan << internalCounter << endl;
 		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl << endl;
