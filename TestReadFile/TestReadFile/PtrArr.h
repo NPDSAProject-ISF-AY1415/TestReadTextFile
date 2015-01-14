@@ -18,7 +18,8 @@ namespace ptrarr {
 	extern double addMElapsed, addWElapsed, addLElapsed, displayMElapsed, displayWElapsed, sequSearchElapsed;
 	extern double removeElapsed;
 
-	extern SIZE_T addMTime, addWTime, addETime, displayMTime, displayWTime, sequSearchTime, removeTime;
+	extern SIZE_T addMVTime, addWVTime, addLVTime, displayMVTime, displayWVTime, sequSearchVTime, removeVTime;
+	extern SIZE_T addMPTime, addWPTime, addLPTime, displayMPTime, displayWPTime, sequSearchPTime, removePTime;
 
 	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 25);
 	Lyric parseLyricData(string lyricStr);

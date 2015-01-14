@@ -10,6 +10,10 @@ namespace ptrarr {
 	double addMElapsed = 0, addWElapsed = 0, addLElapsed = 0, displayMElapsed = 0, displayWElapsed = 0, sequSearchElapsed = 0;
 	double removeElapsed = 0;
 
+	//Memory Counters
+	SIZE_T addMVTime, addWVTime, addLVTime, displayMVTime, displayWVTime, sequSearchVTime, removeVTime;	//Virtual Mem
+	SIZE_T addMPTime, addWPTime, addLPTime, displayMPTime, displayWPTime, sequSearchPTime, removePTime;	//Physical Mem
+
 	/*
 	Color Legend
 	Yellow - Progress Bar/Status Message
@@ -122,6 +126,10 @@ namespace ptrarr {
 		printSeperator();
 		clock_t beginClock = clock();
 
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		while (getline(file, str)){
 
 			//Skip Comments
@@ -149,12 +157,21 @@ namespace ptrarr {
 		loadbar(progressCounter, progressCounter, beginClock);
 		clock_t finalEndClock = clock();
 
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		addWPTime = (ePMem - bPMem);
+		addWVTime = (eVMem - bVMem);
+
 		settextcolor(yellow);
 		addWElapsed = calculateElapsed(beginClock, finalEndClock);
 		cout << endl << "Finished Parsing Song Lyrics." << endl;
 		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addWElapsed << " seconds" << endl;
 		cout << yellow << "Total Words Read: " << cyan << internalCounter << endl;
-		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl << endl;
+		cout << yellow << "Total Word List Length: " << cyan << list.getLength() << endl;
+		cout << yellow << "Page Memory Use: " << cyan << convertMemoryToHumanReadable(addWPTime) << endl;
+		cout << yellow << "RAM Use: " << cyan << convertMemoryToHumanReadable(addWVTime) << endl << endl;
 	}
 
 	/*
@@ -186,6 +203,11 @@ namespace ptrarr {
 		cout << red << "                       Parsing Songs Lyrics Count..." << endl;
 		printSeperator();
 		clock_t beginClock = clock();
+
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		while (getline(file, str)){
 
 			//Skip Comments
@@ -204,12 +226,21 @@ namespace ptrarr {
 		loadbar(progressCounter, progressCounter, beginClock);
 		clock_t finalEndClock = clock();
 
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		addLPTime = (ePMem - bPMem);
+		addLVTime = (eVMem - bVMem);
+
 		settextcolor(yellow);
 		addLElapsed = calculateElapsed(beginClock, finalEndClock);
 		cout << endl << "Finished Parsing Song Lyrics Count." << endl;
 		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addLElapsed << " seconds" << endl;
 		cout << yellow << "Total Lyric Lines Read: " << cyan << internalCounter << endl;
-		cout << yellow << "Total Lyric List Length: " << cyan << list.getLength() << endl << endl;
+		cout << yellow << "Total Lyric List Length: " << cyan << list.getLength() << endl;
+		cout << yellow << "Page Memory Use: " << cyan << convertMemoryToHumanReadable(addLPTime) << endl;
+		cout << yellow << "RAM Use: " << cyan << convertMemoryToHumanReadable(addLVTime) << endl << endl;
 	}
 
 	/*
@@ -238,6 +269,11 @@ namespace ptrarr {
 		cout << red << "                          Parsing Song Information..." << endl;
 		printSeperator();
 		clock_t beginClock = clock();
+
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		while (getline(file, str)){
 			if (internalCounter >= progressCounter)
 				break;
@@ -260,12 +296,21 @@ namespace ptrarr {
 		loadbar(progressCounter, progressCounter, beginClock);
 		clock_t finalEndClock = clock();
 
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		addMPTime = (ePMem - bPMem);
+		addMVTime = (eVMem - bVMem);
+
 		settextcolor(yellow);
 		addMElapsed = calculateElapsed(beginClock, finalEndClock);
 		cout << endl << "Finished Parsing and Adding Song Information." << endl;
 		cout << yellow << "Elapsed Time to add: " << cyan << setprecision(2) << fixed << addMElapsed << " seconds" << endl;
 		cout << yellow << "Total Lines Read: " << cyan << internalCounter << endl;
-		cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl << endl;
+		cout << yellow << "Total Music List Length: " << cyan << list.getLength() << endl;
+		cout << yellow << "Page Memory Use: " << cyan << convertMemoryToHumanReadable(addMPTime) << endl;
+		cout << yellow << "RAM Use: " << cyan << convertMemoryToHumanReadable(addMVTime) << endl << endl;
 	}
 
 	/*
