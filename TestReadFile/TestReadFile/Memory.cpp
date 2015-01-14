@@ -52,7 +52,7 @@ Converts Bytes to KB
 @param bytes Bytes to convert
 @return Kilobytes after conversion
 */
-SIZE_T convertToMB(SIZE_T bytes){
+SIZE_T convertToKB(SIZE_T bytes){
 	//1KB = 1024B
 	return bytes / 1024;
 }
@@ -63,22 +63,24 @@ Converts Bytes to KB
 @return String of properly formatted code
 */
 string convertMemoryToHumanReadable(SIZE_T bytes){
+	stringstream ss;
 	if (bytes > 1048576)	//MB
-		return convertToMB(bytes) + " MB";
-	if (bytes > 1024)		//KB
-		return convertToKB(bytes) + " KB";
-	//Bytes
-	return bytes + " B";
+		ss << convertToMB(bytes) << " MB (" << bytes << " B)";
+	else if (bytes > 1024)	//KB
+		ss << convertToKB(bytes) << " KB (" << bytes << " B)";
+	else					//Bytes
+		ss << bytes << " B";
+	return ss.str();
 }
 
 void printMemoryInfo(){
 	cout << endl;
-	cout << yellow << "==========================" << white << endl;
-	cout << red << "       Memory Usage       " << white << endl;
-	cout << yellow << "==========================" << white << endl;
+	cout << yellow << "==========================================" << white << endl;
+	cout << red << "               Memory Usage               " << white << endl;
+	cout << yellow << "==========================================" << white << endl;
 	cout << white << "Virtual Memory: " << gray << convertMemoryToHumanReadable(getVMUsed()) << endl;
 	cout << white << "Physical Memory: " << gray << convertMemoryToHumanReadable(getPMUsed()) << endl;
 	cout << white << "Peak Physical Memory: " << gray << convertMemoryToHumanReadable(getPeakPMUsed()) << endl;
-	cout << yellow << "==========================" << white << endl;
+	cout << yellow << "==========================================" << white << endl;
 	cout << endl;
 }
