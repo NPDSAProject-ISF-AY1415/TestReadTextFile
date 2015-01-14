@@ -44,6 +44,7 @@ Converts Bytes to MB
 */
 SIZE_T convertToMB(SIZE_T bytes){
 	//1MB = 1024KB = 1048576B
+	return bytes / 1024 / 1024;
 }
 
 /*
@@ -53,6 +54,7 @@ Converts Bytes to KB
 */
 SIZE_T convertToMB(SIZE_T bytes){
 	//1KB = 1024B
+	return bytes / 1024;
 }
 
 /*
