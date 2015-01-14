@@ -75,12 +75,12 @@ string convertMemoryToHumanReadable(SIZE_T bytes){
 
 void printMemoryInfo(){
 	cout << endl;
-	cout << yellow << "==========================================" << white << endl;
-	cout << red << "               Memory Usage               " << white << endl;
-	cout << yellow << "==========================================" << white << endl;
-	cout << white << "Virtual Memory: " << gray << convertMemoryToHumanReadable(getVMUsed()) << endl;
-	cout << white << "Physical Memory: " << gray << convertMemoryToHumanReadable(getPMUsed()) << endl;
-	cout << white << "Peak Physical Memory: " << gray << convertMemoryToHumanReadable(getPeakPMUsed()) << endl;
-	cout << yellow << "==========================================" << white << endl;
+	cout << yellow << "====================================================" << white << endl;
+	cout << red <<    "                    Memory Usage                    " << white << endl;
+	cout << yellow << "====================================================" << white << endl;
+	cout << white << "Virtual Memory (Page File): " << gray << convertMemoryToHumanReadable(getVMUsed()) << endl;
+	cout << white << "Physical Memory (RAM): " << gray << convertMemoryToHumanReadable(getPMUsed()) << endl;
+	cout << white << "Peak Physical Memory (RAM): " << gray << convertMemoryToHumanReadable(getPeakPMUsed()) << endl;
+	cout << yellow << "====================================================" << white << endl;
 	cout << endl;
 }
