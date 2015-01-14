@@ -278,6 +278,7 @@ namespace ptrarr {
 		cout << "3) " << yellow << "Search for a song in database with name" << white << endl;
 		cout << "4) " << yellow << "Remove a song from the database" << white << endl;
 		cout << "5) " << yellow << "View Performance Statistics" << white << endl;
+		cout << "6) " << yellow << "View Plotted Graph" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}
@@ -479,6 +480,30 @@ namespace ptrarr {
 	}
 
 	/*
+	Make a Graph with x axis being the length of the list and the y axis being time taken
+	A line for display, add, remove and stuff
+	@param musicList List of Music Data
+	@param wordList List of Word Data
+	@param lyricList List of Lyric Data
+	*/
+	void makeGraph(){
+		List ptrArrList;
+		//Make Graph for Lyric and get string
+		Graph lycG("Unsorted Pointer-based Array Lyrics", addLElapsed, 0, 0, 0, 0);
+		string lycGStr = lycG.createGraphString();
+		ptrArrList.add(lycGStr);
+		//Make Graph for Songs
+		Graph sonG("Unsorted Pointer-based Array Song Data", addMElapsed, removeElapsed, displayMElapsed, sequSearchElapsed, 0);
+		string sonGStr = sonG.createGraphString();
+		ptrArrList.add(sonGStr);
+		//Make Graph for Words
+		Graph wrdG("Unsorted Pointer-based Array Top Lyric Words", addLElapsed, 0, displayWElapsed, 0, 0);
+		string wrdGStr = wrdG.createGraphString();
+		ptrArrList.add(wrdGStr);
+		plotGraph(ptrArrList);
+	}
+
+	/*
 	Main Pointer Based Array Code
 	@return Error Code (-1 for continue)
 	*/
@@ -506,6 +531,7 @@ namespace ptrarr {
 				case 3: searchSong(mainMusicList); break;
 				case 4: removeMusicInfo(mainMusicList); break;
 				case 5: printStats(); break;
+				case 6: makeGraph(); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;
