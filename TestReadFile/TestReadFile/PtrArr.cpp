@@ -84,6 +84,7 @@ namespace ptrarr {
 	@param lyricList List for lyrics in Songs
 	*/
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList){
+		printMemoryInfo();
 		cout << pink << "How many lines to read in Music File? (-1 to read all): ";
 		settextcolor(cyan);
 		int count;
@@ -101,6 +102,7 @@ namespace ptrarr {
 		cout << red << "                                Parse Completed" << endl;
 		printSeperator();
 		cout << endl;
+		printMemoryInfo();
 	}
 
 	/*
@@ -280,6 +282,7 @@ namespace ptrarr {
 		cout << "4) " << yellow << "Remove a song from the database" << white << endl;
 		cout << "5) " << yellow << "View Performance Statistics" << white << endl;
 		cout << "6) " << yellow << "View Plotted Graph" << white << endl;
+		cout << "8) " << yellow << "View Memory Usage" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}
@@ -533,6 +536,7 @@ namespace ptrarr {
 				case 4: removeMusicInfo(mainMusicList); break;
 				case 5: printStats(); break;
 				case 6: makeGraph(); break;
+				case 8: printMemoryInfo(); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;

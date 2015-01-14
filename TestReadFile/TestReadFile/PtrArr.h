@@ -17,6 +17,9 @@ namespace ptrarr {
 	extern int musicInfoFileLength;
 	extern double addMElapsed, addWElapsed, addLElapsed, displayMElapsed, displayWElapsed, sequSearchElapsed;
 	extern double removeElapsed;
+
+	extern SIZE_T addMTime, addWTime, addETime, displayMTime, displayWTime, sequSearchTime, removeTime;
+
 	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 25);
 	Lyric parseLyricData(string lyricStr);
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList);
