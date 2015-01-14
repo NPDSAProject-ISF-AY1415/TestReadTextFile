@@ -8,7 +8,7 @@ using namespace eku;
 
 int plotGraph(List &graphList){
 	FILE * gnuplotPipe = _popen("gnuplot -persistent", "w");
-	fprintf(gnuplotPipe, "set title \"Unsorted Pointer Based Array\" \n");
+	fprintf(gnuplotPipe, "set title \"Lists Performance Graphs\" \n");
 	//Set The Display, Add, Remove, Binary Search, Sequential Search
 	fprintf(gnuplotPipe, "set xtics offset character 0,0,0 norangelimit (\"Add\" 1, \"Remove\" 2, \"Display\" 3, \"Binary Search\" 4, \"Sequential Search\" 5) \n");
 	bool first_line = true;

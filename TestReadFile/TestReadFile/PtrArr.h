@@ -28,6 +28,6 @@ namespace ptrarr {
 	void listTopWords(List &list);
 	void removeMusicInfo(List &list);
 	void printStats();
-	void makeGraph(List &musicList, List &wordList, List &lyricList);
+	void makeGraph();
 	int mainLoop();
 }
