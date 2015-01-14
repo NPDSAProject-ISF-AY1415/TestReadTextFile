@@ -496,7 +496,7 @@ namespace ptrarr {
 		while (true) {
 			mainPtrArrMenu();
 			string selection;
-			cout << pink << "Select a selection: ";
+			cout << pink << "Select an option: ";
 			getStringInput(selection);
 			if (is_number(selection)){
 				switch (stoi(selection))
