@@ -9,6 +9,7 @@
 #include "Lyric.h"
 #include "Graph.h"
 #include "plotGraph.h"
+#include "Memory.h"
 #include <iomanip>		//std::setw
 #include <sstream>		//String Stream
 

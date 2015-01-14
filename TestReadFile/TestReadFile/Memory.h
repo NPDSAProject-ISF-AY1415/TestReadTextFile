@@ -1,4 +1,6 @@
 #include <Windows.h>
+#include <Psapi.h>
 
-DWORDLONG getTotalVirtualMem();
-DWORDLONG getUsedVirtualMem();
+SIZE_T getVMUsed();
+SIZE_T getPMUsed();
+SIZE_T getPeakPMUsed();

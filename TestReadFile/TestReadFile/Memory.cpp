@@ -2,17 +2,25 @@
 
 using namespace std;
 
-DWORDLONG getTotalVirtualMem(){
-	MEMORYSTATUSEX memInfo;
-	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-	GlobalMemoryStatusEx(&memInfo);
-	return memInfo.ullTotalPageFile;
+SIZE_T getVMUsed(){
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	SIZE_T virtualMemUsedByMe = pmc.PagefileUsage;
+	return virtualMemUsedByMe;
 }
 
 
-DWORDLONG getUsedVirtualMem(){
-	MEMORYSTATUSEX memInfo;
-	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-	GlobalMemoryStatusEx(&memInfo);
-	return memInfo.ullTotalPageFile - memInfo.ullAvailPageFile;
+SIZE_T getPMUsed(){
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+	return physMemUsedByMe;
 }
+
+SIZE_T getPeakPMUsed(){
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	SIZE_T physMemUsedByMe = pmc.PeakWorkingSetSize;
+	return physMemUsedByMe;
+}
+
