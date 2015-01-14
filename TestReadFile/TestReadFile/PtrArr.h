@@ -7,6 +7,8 @@
 #include "Music.h"
 #include "Utility.h"
 #include "Lyric.h"
+#include "Graph.h"
+#include "plotGraph.h"
 #include <iomanip>		//std::setw
 #include <sstream>		//String Stream
 
@@ -26,5 +28,6 @@ namespace ptrarr {
 	void listTopWords(List &list);
 	void removeMusicInfo(List &list);
 	void printStats();
+	void makeGraph(List &musicList, List &wordList, List &lyricList);
 	int mainLoop();
 }
