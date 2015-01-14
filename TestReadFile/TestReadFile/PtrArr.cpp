@@ -11,8 +11,8 @@ namespace ptrarr {
 	double removeElapsed = 0;
 
 	//Memory Counters
-	SIZE_T addMVTime, addWVTime, addLVTime, displayMVTime, displayWVTime, sequSearchVTime, removeVTime;	//Virtual Mem
-	SIZE_T addMPTime, addWPTime, addLPTime, displayMPTime, displayWPTime, sequSearchPTime, removePTime;	//Physical Mem
+	SIZE_T addMVTime = 0, addWVTime = 0, addLVTime = 0, displayMVTime = 0, displayWVTime = 0, sequSearchVTime = 0, removeVTime = 0;	//Virtual Mem
+	SIZE_T addMPTime = 0, addWPTime = 0, addLPTime = 0, displayMPTime = 0, displayWPTime = 0, sequSearchPTime = 0, removePTime = 0;	//Physical Mem
 
 	/*
 	Color Legend
@@ -466,11 +466,12 @@ namespace ptrarr {
 	Option 3 : Prints out the statistics (timing/mem usage) of list
 	*/
 	void printStats(){
+		//Timings (Sequence 40 | 37)
 		printSeperator();
-		cout << red << "                         Pointer-based Array Statistics" << endl;
+		cout << red <<"                    Pointer-based Array Statistics (Timings)" << endl;
 		printSeperator();
 		//Add Music
-		cout << red << " " << "              Add (Music)              " << yellow << "|" << red << "        " << cyan;
+		cout << red << "               Add (Music)              " << yellow << "|        " << cyan;
 		if (addMElapsed != 0)
 			cout << setprecision(2) << fixed << addMElapsed << " Seconds ";
 		else
@@ -478,7 +479,7 @@ namespace ptrarr {
 		cout << endl;
 
 		//Add Music
-		cout << red << " " << "              Add (Words)              " << yellow << "|" << red << "        " << cyan;
+		cout << red << "               Add (Words)              " << yellow << "|        " << cyan;
 		if (addWElapsed != 0)
 			cout << setprecision(2) << fixed << addWElapsed << " Seconds ";
 		else
@@ -486,7 +487,7 @@ namespace ptrarr {
 		cout << endl;
 
 		//Add Lyric
-		cout << red << " " << "              Add (Lyric)              " << yellow << "|" << red << "        " << cyan;
+		cout << red << "               Add (Lyric)              " << yellow << "|        " << cyan;
 		if (addLElapsed != 0)
 			cout << setprecision(2) << fixed << addLElapsed << " Seconds ";
 		else
@@ -494,7 +495,7 @@ namespace ptrarr {
 		cout << endl;
 
 		//Display Music
-		cout << " " << red << "            Display (Music)            " << yellow << "|" << red << "        " << cyan;
+		cout << red << "             Display (Music)            " << yellow << "|        " << cyan;
 		if (displayMElapsed != 0)
 			cout << setprecision(2) << fixed << displayMElapsed << " Seconds ";
 		else
@@ -502,7 +503,7 @@ namespace ptrarr {
 		cout << endl;
 
 		//Display Top Words
-		cout << " " << red << "          Display (Top Words)          " << yellow << "|" << red << "        " << cyan;
+		cout << red << "           Display (Top Words)          " << yellow << "|        " << cyan;
 		if (displayWElapsed != 0)
 			cout << setprecision(2) << fixed << displayWElapsed << " Seconds ";
 		else
@@ -510,7 +511,7 @@ namespace ptrarr {
 		cout << endl;
 
 		//Remove
-		cout << " " << red << "              Remove Item              " << yellow << "|" << red << "        " << cyan;
+		cout << red << "               Remove Item              " << yellow << "|        " << cyan;
 		if (removeElapsed != 0)
 			cout << setprecision(2) << fixed << removeElapsed << " Seconds ";
 		else
@@ -518,13 +519,109 @@ namespace ptrarr {
 		cout << endl;
 
 		//Seq Search
-		cout << " " << red << "           Sequential Search           " << yellow << "|" << red << "        " << cyan;
+		cout << red << "            Sequential Search           " << yellow << "|        " << cyan;
 		if (sequSearchElapsed != 0)
 			cout << setprecision(2) << fixed << sequSearchElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
 		cout << endl;
 
+		printSeperator();
+		//Memory (Sequence 26 | 25 | 25)
+		cout << red << "                   Pointer-based Array Statistics (Mem Usage)" << endl;
+		printSeperator();
+		cout << red << "      Operation           " << yellow << "|" << red << "         RAM Use         " << yellow << "|" << red << "  V.Mem Use (Page File)  " << endl;
+		printSeperator();
+		//Add Music
+		cout << red << "       Add (Music)        " << yellow << "|" << cyan;
+		if (addMPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addMPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (addMVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addMVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Add Words
+		cout << red << "       Add (Words)        " << yellow << "|" << cyan;
+		if (addWPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addWPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (addWVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addWVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Add Lyric
+		cout << red << "       Add (Lyric)        " << yellow << "|" << cyan;
+		if (addLPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addLPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (addLVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(addLVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Display Music
+		cout << red << "     Display (Music)      " << yellow << "|" << cyan;
+		if (displayMPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(displayMPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (displayMVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(displayMVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Display Top Words
+		cout << red << "   Display (Top Words)    " << yellow << "|" << cyan;
+		if (displayWPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(displayWPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (displayWVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(displayWVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Remove
+		cout << red << "       Remove Item        " << yellow << "|" << cyan;
+		if (removePTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(removePTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (removeVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(removeVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
+
+		//Seq Search
+		cout << red << "    Sequential Search     " << yellow << "|" << cyan;
+		if (sequSearchPTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(sequSearchPTime) << "    ";
+		else
+			cout << "        Untested         ";
+		cout << yellow << "|" << cyan;
+		if (sequSearchVTime != 0)
+			cout << "   " << convertMemoryToHumanReadable(sequSearchVTime);
+		else
+			cout << "        Untested";
+		cout << endl;
 		printSeperator();
 	}
 

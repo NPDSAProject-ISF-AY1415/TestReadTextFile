@@ -21,7 +21,7 @@ namespace ptrarr {
 	extern SIZE_T addMVTime, addWVTime, addLVTime, displayMVTime, displayWVTime, sequSearchVTime, removeVTime;
 	extern SIZE_T addMPTime, addWPTime, addLPTime, displayMPTime, displayWPTime, sequSearchPTime, removePTime;
 
-	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 25);
+	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20);
 	Lyric parseLyricData(string lyricStr);
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList);
 	void readTopWords(List &list);
