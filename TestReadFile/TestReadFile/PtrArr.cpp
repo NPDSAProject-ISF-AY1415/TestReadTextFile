@@ -327,7 +327,7 @@ namespace ptrarr {
 		cout << "4) " << yellow << "Remove a song from the database" << white << endl;
 		cout << "5) " << yellow << "View Performance Statistics" << white << endl;
 		cout << "6) " << yellow << "View Plotted Graph" << white << endl;
-		cout << "8) " << yellow << "View Memory Usage" << white << endl;
+		cout << "8) " << yellow << "View Program Memory Usage" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}

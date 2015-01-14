@@ -19,7 +19,7 @@ void mainMenu(){
 	cout << "1) " << yellow << "Unsorted Pointer-Based Array" << white << endl;
 	cout << "2) " << yellow << "View Performance Statistics" << white << endl;
 	cout << "3) " << yellow << "Plot Performance Graphs" << white << endl;
-	cout << "4) " << yellow << "View Memory Usage" << white << endl;
+	cout << "4) " << yellow << "View Program Memory Usage" << white << endl;
 	cout << "0) " << yellow << "Quit" << white << endl;
 }
 
