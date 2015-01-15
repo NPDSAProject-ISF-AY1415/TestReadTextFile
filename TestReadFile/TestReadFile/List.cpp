@@ -89,6 +89,7 @@ void List::remove(int index){
 			Node *removedNode = tmpNode->next;
 			//Set node to point to node after removed node
 			tmpNode->next = removedNode->next;
+			delete removedNode;
 		}
 		size--;
 	}
