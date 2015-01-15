@@ -393,9 +393,8 @@ namespace ptrarr {
 		cout << "2) " << yellow << "View All the Top Words found in Lyrics" << white << endl;
 		cout << "3) " << yellow << "Search for a song in database with name" << white << endl;
 		cout << "4) " << yellow << "Remove a song from the database" << white << endl;
-		cout << "5) " << yellow << "View Performance Statistics" << white << endl;
-		cout << "6) " << yellow << "View Plotted Graph" << white << endl;
-		cout << "8) " << yellow << "View Program Memory Usage" << white << endl;
+		cout << "5) " << yellow << "View Plotted Graph" << white << endl;
+		cout << "8) " << yellow << "Performance Utilities" << white << endl;
 		cout << "9) " << yellow << "Return to Main Menu" << white << endl;
 		cout << "0) " << yellow << "Quit" << white << endl;
 	}
@@ -918,6 +917,33 @@ namespace ptrarr {
 	}
 
 	/*
+	Performance Menu
+	*/
+	void performanceMenu(){
+		printSeperator();
+		cout << red << "                        Select a Performance Option" << endl;
+		printSeperator();
+		settextcolor(white);
+		cout << "1) " << yellow << "View Performance Statistics" << white << endl;
+		cout << "2) " << yellow << "View Program Memory Usage" << white << endl;
+		string selection;
+		cout << pink << "Select an option: ";
+		getStringInput(selection);
+		if (is_number(selection)){
+			switch (stoi(selection))
+			{
+			case 1: printStats(); break;
+			case 2: printMemoryInfo(); break;
+			case 0: return;
+			default: cout << dark_red << "Invalid Selection." << endl; break;
+			}
+		}
+		else {
+			cout << dark_red << "Selection must be an integer" << endl;
+		}
+	}
+
+	/*
 	Main Pointer Based List Code
 	@return Error Code (-1 for continue)
 	*/
@@ -944,9 +970,8 @@ namespace ptrarr {
 				case 2: listTopWords(mainWordList); break;
 				case 3: searchSong(mainMusicList); break;
 				case 4: removeMusicInfo(mainMusicList); break;
-				case 5: printStats(); break;
-				case 6: plotGraphMenu(); break;
-				case 8: printMemoryInfo(); break;
+				case 5: plotGraphMenu(); break;
+				case 8: performanceMenu(); break;
 				case 9: return -1;
 				case 0: return 0;
 					//case 4: mainList.print(); break;
