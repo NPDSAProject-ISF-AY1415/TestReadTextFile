@@ -46,7 +46,7 @@ int main(){
 			{
 			case 1: menErr = ptrarr::mainLoop(); break;
 			case 2: ptrarr::printStats(); break;
-			case 3: ptrarr::makeGraph(); break;
+			case 3: ptrarr::plotGraphMenu(); break;
 			case 4: printMemoryInfo(); break;
 			case 0: return 0;
 				//case 4: mainList.print(); break;

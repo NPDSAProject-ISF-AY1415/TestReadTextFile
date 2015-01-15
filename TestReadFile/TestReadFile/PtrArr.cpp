@@ -15,9 +15,32 @@ namespace ptrarr {
 	SIZE_T addMPTime = -1, addWPTime = -1, addLPTime = -1, displayMPTime = -1, displayWPTime = -1, sequSearchPTime = -1, removePTime = -1;	//Physical Mem
 
 	//Array Logger
-	vector<double> timingMCounter;
-	vector<double> timingLCounter;
-	vector<double> timingWCounter(5000);
+	vector<double> timingAddWCounter(WORD_LENGTH);
+	vector<double> memoryPAddWCounter(WORD_LENGTH);
+	vector<double> memoryVAddWCounter(WORD_LENGTH);
+	vector<double> timingDisplayWCounter(WORD_LENGTH);
+	vector<double> memoryPDisplayWCounter(WORD_LENGTH);
+	vector<double> memoryVDisplayWCounter(WORD_LENGTH);
+
+	vector<double> timingAddMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryPAddMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryVAddMCounter(SONG_FILE_LENGTH);
+
+	vector<double> timingAddLCounter(LYRIC_FILE_LENGTH);
+	vector<double> memoryPAddLCounter(LYRIC_FILE_LENGTH);
+	vector<double> memoryVAddLCounter(LYRIC_FILE_LENGTH);
+
+	vector<double> timingDisplayMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryPDisplayMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryVDisplayMCounter(SONG_FILE_LENGTH);
+
+	vector<double> timingSeqSearchMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryPSeqSearchMCounter(SONG_FILE_LENGTH);
+	vector<double> memoryVSeqSearchMCounter(SONG_FILE_LENGTH);
+	
+	vector<double> timingRemoveMCounter(3);
+	vector<double> memoryPRemoveMCounter(3);
+	vector<double> memoryVRemoveMCounter(3);
 
 	/*
 	Color Legend
@@ -114,7 +137,9 @@ namespace ptrarr {
 		settextcolor(cyan);
 		int count;
 		cin >> count;
-		timingMCounter.resize(count);
+		timingAddMCounter.resize(count);
+		memoryPAddMCounter.resize(count);
+		memoryVAddMCounter.resize(count);
 		printSeperator();
 		cout << red << "                             Parsing Text Files..." << endl;
 		printSeperator();
@@ -123,7 +148,9 @@ namespace ptrarr {
 		cout << pink << "How many lines to read in Lyric Count File? (-1 to read all): ";
 		settextcolor(cyan);
 		cin >> count;
-		timingLCounter.resize(count);
+		timingAddLCounter.resize(count);
+		memoryPAddLCounter.resize(count);
+		memoryVAddLCounter.resize(count);
 		readSongLyricCount(lyricList, count);
 		printSeperator();
 		cout << red << "                                Parse Completed" << endl;
@@ -169,7 +196,12 @@ namespace ptrarr {
 						cout << topwrd << endl;
 
 					list.add(topwrd);
-					timingWCounter[internalCounter] = calculateElapsed(beginClock, clock());
+					
+					//Log Memory and CPU Time
+					timingAddWCounter[internalCounter] = calculateElapsed(beginClock, clock());
+					memoryPAddWCounter[internalCounter] = (double) (getPMUsed() - bPMem);
+					memoryVAddWCounter[internalCounter] = (double) (getVMUsed() - bVMem);
+
 					loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 					//Increment counter
 					internalCounter++;
@@ -241,7 +273,12 @@ namespace ptrarr {
 				if (internalCounter >= progressCounter) break;
 
 				list.add(str);
-				timingLCounter[internalCounter] = calculateElapsed(beginClock, clock());
+
+				timingAddLCounter[internalCounter] = calculateElapsed(beginClock, clock());
+				//Log Memory and CPU Time
+				memoryPAddLCounter[internalCounter] = (double) (getPMUsed() - bPMem);
+				memoryVAddLCounter[internalCounter] = (double) (getVMUsed() - bVMem);
+
 				loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 				//Increment counter
 				internalCounter++;
@@ -313,7 +350,12 @@ namespace ptrarr {
 				//Parse Music Details Line
 				list.add(str);
 			}
-			timingMCounter[internalCounter] = calculateElapsed(beginClock, clock());
+
+			timingAddMCounter[internalCounter] = calculateElapsed(beginClock, clock());
+			//Log Memory and CPU Time
+			memoryPAddMCounter[internalCounter] = (double)(getPMUsed() - bPMem);
+			memoryVAddMCounter[internalCounter] = (double)(getVMUsed() - bVMem);
+
 			loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 			//Increment counter
 			internalCounter++;
@@ -373,6 +415,10 @@ namespace ptrarr {
 		getline(cin, target);
 		settextcolor(white);
 
+		timingSeqSearchMCounter.resize(list.getLength());
+		memoryPSeqSearchMCounter.resize(list.getLength());
+		memoryVSeqSearchMCounter.resize(list.getLength());
+
 		clock_t start = clock();
 		//Get Start Memory (Virtual, Physical)
 		SIZE_T bVMem = getVMUsed();
@@ -382,12 +428,21 @@ namespace ptrarr {
 		for (int i = 1; i <= list.getLength(); i++){
 			string res = list.get(i);
 			Music musIfo = parseMusicItem(res);
+			
+			//Log Memory and CPU Time
+			timingSeqSearchMCounter[i-1] = calculateElapsed(start, clock());
+			memoryPSeqSearchMCounter[i - 1] = (double)(getPMUsed() - bPMem);
+			memoryVSeqSearchMCounter[i - 1] = (double)(getVMUsed() - bVMem);
+
 			if (musIfo.getMTitle() == target){
 				cout << endl << yellow << "Music Found! Details of the music file is found below:" << endl;
 				//printMusicInfo(musIfo);
 				musIfo.printMusicInfo();
 				cout << endl;
 				found = true;
+				timingSeqSearchMCounter.resize(i);
+				memoryPSeqSearchMCounter.resize(i);
+				memoryVSeqSearchMCounter.resize(i);
 				break;
 			}
 		}
@@ -419,6 +474,11 @@ namespace ptrarr {
 		printSeperator();
 
 		clock_t start = clock();
+
+		timingDisplayMCounter.resize(list.getLength());
+		memoryPDisplayMCounter.resize(list.getLength());
+		memoryVDisplayMCounter.resize(list.getLength());
+
 		//Get Start Memory (Virtual, Physical)
 		SIZE_T bVMem = getVMUsed();
 		SIZE_T bPMem = getPMUsed();
@@ -431,6 +491,10 @@ namespace ptrarr {
 			cout << yellow << "=========================================================" << endl;
 			musIfo.printMusicInfo();
 			cout << yellow << "=========================================================" << endl;
+			//Log Memory and CPU Time
+			timingDisplayMCounter[i - 1] = calculateElapsed(start, clock());
+			memoryPDisplayMCounter[i - 1] = (double)(getPMUsed() - bPMem);
+			memoryVDisplayMCounter[i - 1] = (double)(getVMUsed() - bVMem);
 		}
 		clock_t end = clock();
 
@@ -468,6 +532,12 @@ namespace ptrarr {
 			}
 			string wordString = list.get(i);
 			cout << "  " << white << wordString << yellow << "  |";
+
+			//Log Memory and CPU Time
+			timingDisplayWCounter[i - 1] = calculateElapsed(start, clock());
+			memoryPDisplayWCounter[i - 1] = (double)(getPMUsed() - bPMem);
+			memoryVDisplayWCounter[i - 1] = (double)(getVMUsed() - bVMem);
+
 			modder++;
 		}
 		cout << endl;
@@ -533,6 +603,17 @@ namespace ptrarr {
 			//Calculate Memory Used (Virtual, Physical)
 			removePTime = (ePMem - bPMem);
 			removeVTime = (eVMem - bVMem);
+
+			//Log Memory and CPU Time
+			timingRemoveMCounter[0] = 0;
+			memoryPRemoveMCounter[0] = 0;
+			memoryVRemoveMCounter[0] = 0;
+			timingRemoveMCounter[1] = calculateElapsed(start, clock());
+			memoryPRemoveMCounter[1] = (double)(getPMUsed() - bPMem);
+			memoryVRemoveMCounter[1] = (double)(getVMUsed() - bVMem);
+			timingRemoveMCounter[2] = calculateElapsed(start, clock());
+			memoryPRemoveMCounter[2] = (double)(getPMUsed() - bPMem);
+			memoryVRemoveMCounter[2] = (double)(getVMUsed() - bVMem);
 
 			removeElapsed = calculateElapsed(start, end);
 			cout << yellow << "Elapsed Time for removing music: " << cyan << setprecision(2) << fixed << removeElapsed << " seconds." << endl;
@@ -710,25 +791,130 @@ namespace ptrarr {
 
 	/*
 	Make a Graph with x axis being the length of the list and the y axis being time taken
-	@param musicList List of Music Data
-	@param wordList List of Word Data
-	@param lyricList List of Lyric Data
 	*/
-	void makeTimeGraph(){
+	void makeAddTimeGraph(){
 		List ptrArrList;
 		//Make Graph for Lyric and get string
-		Graph lycG("Unsorted Pointer-based List Lyrics", timingLCounter.size(), timingLCounter);
-		string lycGStr = lycG.createGraphString();
-		ptrArrList.add(lycGStr);
+		if (addLElapsed == -1)
+			cout << dark_red << "There is no data for adding Lyrics. Please run the add operation before doing this." << endl;
+		else{
+			Graph lycG("Lyrics", timingAddLCounter.size(), timingAddLCounter);
+			string lycGStr = lycG.createGraphString();
+			ptrArrList.add(lycGStr);
+		}
 		//Make Graph for Songs
-		Graph sonG("Unsorted Pointer-based List Song Data", timingMCounter.size(), timingMCounter);
-		string sonGStr = sonG.createGraphString();
-		ptrArrList.add(sonGStr);
+		if (addMElapsed == -1)
+			cout << dark_red << "There is no data for adding Song Data. Please run the add operation before doing this." << endl;
+		else {
+			Graph sonG("Song Data", timingAddMCounter.size(), timingAddMCounter);
+			string sonGStr = sonG.createGraphString();
+			ptrArrList.add(sonGStr);
+		}
 		//Make Graph for Words
-		Graph wrdG("Unsorted Pointer-based List Top Lyric Words", timingWCounter.size(), timingWCounter);
-		string wrdGStr = wrdG.createGraphString();
-		ptrArrList.add(wrdGStr);
-		plotGraph(ptrArrList, "Add into list Timings Graph");
+		if (addWElapsed == -1)
+			cout << dark_red << "There is no data for adding top words. Please run the add operation before doing this." << endl;
+		else {
+			Graph wrdG("Top Lyric Words", timingAddWCounter.size(), timingAddWCounter);
+			string wrdGStr = wrdG.createGraphString();
+			ptrArrList.add(wrdGStr);
+		}
+		if (ptrArrList.getLength() > 0 && ptrArrList.getLength() <=3)
+			plotGraph(ptrArrList, "Unsorted Pointer-Based List Timings Graph (ADD)");
+	}
+
+	/*
+	Make a Graph with x axis being the length of the list and the y axis being time taken
+	*/
+	void makeDisplayTimeGraph(){
+		List ptrArrList;
+		if (displayMElapsed == -1)
+			cout << dark_red << "There is no data for displaying song data. Please run the display operation before doing this." << endl;
+		else{
+			Graph sonG("Song Data", timingDisplayMCounter.size(), timingDisplayMCounter);
+			string sonGStr = sonG.createGraphString();
+			ptrArrList.add(sonGStr);
+		}
+		if (displayWElapsed == -1)
+			cout << dark_red << "There is no data for displaying top words. Please run the display operation before doing this." << endl;
+		else{
+			Graph wrdG("Top Lyric Words", timingDisplayWCounter.size(), timingDisplayWCounter);
+			string wrdGStr = wrdG.createGraphString();
+			ptrArrList.add(wrdGStr);
+		}
+		if (ptrArrList.getLength() > 0 && ptrArrList.getLength() <= 2)
+			plotGraph(ptrArrList, "Unsorted Pointer-Based List Timings Graph (DISPLAY)");
+	}
+
+	/*
+	Make a Graph with x axis being the length of the list and the y axis being time taken
+	*/
+	void makeRemoveTimeGraph(){
+		List ptrArrList;
+		if (removeElapsed == -1)
+			cout << dark_red << "There is no data for removing song data. Please run the remove operation before doing this." << endl;
+		else {
+			Graph sonG("Song Data", timingRemoveMCounter.size(), timingRemoveMCounter);
+			string sonGStr = sonG.createGraphString();
+			ptrArrList.add(sonGStr);
+		}
+		if (ptrArrList.getLength() == 1)
+			plotGraph(ptrArrList, "Unsorted Pointer-Based List Timings Graph (REMOVE)");
+	}
+
+	/*
+	Make a Graph with x axis being the length of the list and the y axis being time taken
+	*/
+	void makeSeqSearchTimeGraph(){
+		List ptrArrList;
+		if (sequSearchElapsed == -1)
+			cout << dark_red << "There is no data for searching song data sequentially. Please run the seq. search operation before doing this." << endl;
+		else {
+			Graph sonG("Song Data", timingSeqSearchMCounter.size(), timingSeqSearchMCounter);
+			string sonGStr = sonG.createGraphString();
+			ptrArrList.add(sonGStr);
+		}
+		if (ptrArrList.getLength() == 1)
+			plotGraph(ptrArrList, "Unsorted Pointer-Based List Timings Graph (SEQUENTIAL SEARCH)");
+	}
+
+	/*
+	Plot Graph Menu
+	*/
+	void plotGraphMenu(){
+		printSeperator();
+		cout << red << "                     Select a graph to view" << endl;
+		printSeperator();
+		settextcolor(white);
+		cout << "1) " << yellow << "Add Items (Timings)" << white << endl;
+		cout << "2) " << yellow << "Add Items (Memory)" << white << endl;
+		cout << "3) " << yellow << "Display Items (Timings)" << white << endl;
+		cout << "4) " << yellow << "Display Items (Memory)" << white << endl;
+		cout << "5) " << yellow << "Remove Item (Timings)" << white << endl;
+		cout << "6) " << yellow << "Remove Item (Memory)" << white << endl;
+		cout << "7) " << yellow << "Sequential Search Items (Timings)" << white << endl;
+		cout << "8) " << yellow << "Sequential Search Items (Memory)" << white << endl;
+		cout << "0) " << yellow << "Return to Menu" << white << endl;
+		string selection;
+		cout << pink << "Select an option: ";
+		getStringInput(selection);
+		if (is_number(selection)){
+			switch (stoi(selection))
+			{
+			case 1: makeAddTimeGraph(); break;
+			case 2: cout << dark_aqua << "SOON" << endl; break;
+			case 3: makeDisplayTimeGraph(); break;
+			case 4: cout << dark_aqua << "SOON" << endl; break;
+			case 5: makeRemoveTimeGraph(); break;
+			case 6: cout << dark_aqua << "SOON" << endl; break;
+			case 7: makeSeqSearchTimeGraph(); break;
+			case 8: cout << dark_aqua << "SOON" << endl; break;
+			case 0: return;
+			default: cout << dark_red << "Invalid Selection." << endl; break;
+			}
+		}
+		else {
+			cout << dark_red << "Selection must be an integer" << endl;
+		}
 	}
 
 	/*
@@ -759,7 +945,7 @@ namespace ptrarr {
 				case 3: searchSong(mainMusicList); break;
 				case 4: removeMusicInfo(mainMusicList); break;
 				case 5: printStats(); break;
-				case 6: makeGraph(); break;
+				case 6: plotGraphMenu(); break;
 				case 8: printMemoryInfo(); break;
 				case 9: return -1;
 				case 0: return 0;
