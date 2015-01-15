@@ -530,17 +530,18 @@ namespace ptrarr {
 		//Memory (Sequence 26 | 25 | 25)
 		cout << red << "                   Pointer-based Array Statistics (Mem Usage)" << endl;
 		printSeperator();
-		cout << red << "      Operation           " << yellow << "|" << red << "         RAM Use         " << yellow << "|" << red << "  V.Mem Use (Page File)  " << endl;
+		cout << red << "        Operation         " << yellow << "|" << red << "         RAM Use         " << yellow << "|" << red << "  V.Mem Use (Page File)  " << endl;
 		printSeperator();
 		//Add Music
 		cout << red << "       Add (Music)        " << yellow << "|" << cyan;
 		if (addMPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addMPTime) << "    ";
+			//cout << "   " << convertMemoryToHumanReadable(addMPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(addMPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (addMVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addMVTime);
+			cout << centerString(convertMemoryToHumanReadable(addMVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -548,12 +549,12 @@ namespace ptrarr {
 		//Add Words
 		cout << red << "       Add (Words)        " << yellow << "|" << cyan;
 		if (addWPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addWPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(addWPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (addWVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addWVTime);
+			cout << centerString(convertMemoryToHumanReadable(addWVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -561,12 +562,12 @@ namespace ptrarr {
 		//Add Lyric
 		cout << red << "       Add (Lyric)        " << yellow << "|" << cyan;
 		if (addLPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addLPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(addLPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (addLVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(addLVTime);
+			cout << centerString(convertMemoryToHumanReadable(addLVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -574,12 +575,12 @@ namespace ptrarr {
 		//Display Music
 		cout << red << "     Display (Music)      " << yellow << "|" << cyan;
 		if (displayMPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(displayMPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(displayMPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (displayMVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(displayMVTime);
+			cout << centerString(convertMemoryToHumanReadable(displayMVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -587,12 +588,12 @@ namespace ptrarr {
 		//Display Top Words
 		cout << red << "   Display (Top Words)    " << yellow << "|" << cyan;
 		if (displayWPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(displayWPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(displayWPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (displayWVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(displayWVTime);
+			cout << centerString(convertMemoryToHumanReadable(displayWVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -600,12 +601,12 @@ namespace ptrarr {
 		//Remove
 		cout << red << "       Remove Item        " << yellow << "|" << cyan;
 		if (removePTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(removePTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(removePTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (removeVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(removeVTime);
+			cout << centerString(convertMemoryToHumanReadable(removeVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;
@@ -613,12 +614,12 @@ namespace ptrarr {
 		//Seq Search
 		cout << red << "    Sequential Search     " << yellow << "|" << cyan;
 		if (sequSearchPTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(sequSearchPTime) << "    ";
+			cout << centerString(convertMemoryToHumanReadable(sequSearchPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
 		if (sequSearchVTime != 0)
-			cout << "   " << convertMemoryToHumanReadable(sequSearchVTime);
+			cout << centerString(convertMemoryToHumanReadable(sequSearchVTime).c_str(), 25);
 		else
 			cout << "        Untested";
 		cout << endl;

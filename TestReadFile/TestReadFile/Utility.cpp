@@ -87,7 +87,7 @@ namespace utility {
 	@param size Size of String to figure out what to center
 	@return Centered String
 	*/
-	string centerString(char* s, int size){
+	string centerString(const char* s, int size){
 		int len = strlen(s);
 		int pos = (int)((size - len) / 2);
 		stringstream centeredStr;

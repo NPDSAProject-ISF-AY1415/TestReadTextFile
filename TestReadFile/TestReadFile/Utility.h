@@ -19,6 +19,6 @@ namespace utility{
 	Music parseMusicItem(string music);
 	void printAscii();
 	void getStringInput(string &storein);
-	string centerString(char* s, int size);
+	string centerString(const char* s, int size);
 }
 #endif
