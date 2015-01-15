@@ -14,6 +14,7 @@ SIZE_T getPeakPMUsed();
 SIZE_T convertToMB(SIZE_T bytes);
 SIZE_T convertToKB(SIZE_T bytes);
 string convertMemoryToHumanReadable(SIZE_T bytes);
+string convertMemoryToHumanReadableSht(SIZE_T bytes);
 void printMemoryInfo();
 
 #endif

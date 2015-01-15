@@ -12,6 +12,7 @@
 #include "Memory.h"
 #include <iomanip>		//std::setw
 #include <sstream>		//String Stream
+#define CONSOLE_WINDOW_SIZE 78
 
 namespace ptrarr {
 	extern int musicInfoFileLength;
@@ -21,7 +22,7 @@ namespace ptrarr {
 	extern SIZE_T addMVTime, addWVTime, addLVTime, displayMVTime, displayWVTime, sequSearchVTime, removeVTime;
 	extern SIZE_T addMPTime, addWPTime, addLPTime, displayMPTime, displayWPTime, sequSearchPTime, removePTime;
 
-	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w = 20);
+	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, SIZE_T beginPMem, SIZE_T beginVMem, unsigned int w = 10);
 	Lyric parseLyricData(string lyricStr);
 	void parseFiles(List &musInfoList, List &wordList, List &lyricList);
 	void readTopWords(List &list);

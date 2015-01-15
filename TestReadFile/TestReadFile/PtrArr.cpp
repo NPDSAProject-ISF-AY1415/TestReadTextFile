@@ -32,7 +32,7 @@ namespace ptrarr {
 	@param w Width of the bar
 	@param beginClock Start of elapsed time
 	*/
-	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, unsigned int w )
+	static inline void loadbar(unsigned int x, unsigned int n, clock_t beginClock, SIZE_T beginPMem, SIZE_T beginVMem, unsigned int w )
 	{
 		if ((x != n) && (x % (n / 100 + 1) != 0) && n >= 2000) return;
 
@@ -40,14 +40,30 @@ namespace ptrarr {
 		clock_t endClock = clock();
 		double elapsedSec = calculateElapsed(beginClock, endClock);
 
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		SIZE_T pMem = (ePMem - beginPMem);
+		SIZE_T vMem = (eVMem - beginVMem);
+
 		float ratio = x / (float)n;
 		int   c = ratio * w;
 
+		//Print Progress Bar
 		cout << setw(3) << white << "Parsed: " << cyan << x << white << "/" << green << n << yellow << " [" << red;
 		for (int x = 0; x < c; x++) cout << "=";
 		for (int x = c; x < w; x++) cout << " ";
-		cout << yellow << "] " << (int)(ratio * 100) << "%" << white << " Time Elapsed: " << cyan << setprecision(2) << fixed << elapsedSec;
-		cout << " sec\r" << flush;
+		cout << yellow << "] " << (int)(ratio * 100) << "%" << white << " Time: " << cyan << setprecision(2) << fixed << elapsedSec << " sec";
+		cout << white << " Mem: " << gray << convertMemoryToHumanReadableSht(pMem) << white << "/" << dark_white << convertMemoryToHumanReadableSht(vMem);
+		//Get Console Cursor Pos
+		CONSOLE_SCREEN_BUFFER_INFO SBInfo;
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &SBInfo);
+		int currentlen = SBInfo.dwCursorPosition.X;
+		//Zero out stuff
+		for (int i = currentlen - 1; i < CONSOLE_WINDOW_SIZE; i++)
+			cout << " ";
+		cout << "\r" << flush;
 		settextcolor(white);
 	}
 
@@ -146,7 +162,7 @@ namespace ptrarr {
 						cout << topwrd << endl;
 
 					list.add(topwrd);
-					loadbar(internalCounter, progressCounter, beginClock);
+					loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 					//Increment counter
 					internalCounter++;
 				}
@@ -154,7 +170,7 @@ namespace ptrarr {
 			}
 		}
 
-		loadbar(progressCounter, progressCounter, beginClock);
+		loadbar(progressCounter, progressCounter, beginClock, bPMem, bVMem);
 		clock_t finalEndClock = clock();
 
 		//Get Finish Memory (Virtual, Physical)
@@ -217,13 +233,13 @@ namespace ptrarr {
 				if (internalCounter >= progressCounter) break;
 
 				list.add(str);
-				loadbar(internalCounter, progressCounter, beginClock);
+				loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 				//Increment counter
 				internalCounter++;
 			}
 		}
 
-		loadbar(progressCounter, progressCounter, beginClock);
+		loadbar(progressCounter, progressCounter, beginClock, bPMem, bVMem);
 		clock_t finalEndClock = clock();
 
 		//Get Finish Memory (Virtual, Physical)
@@ -288,12 +304,12 @@ namespace ptrarr {
 				//Parse Music Details Line
 				list.add(str);
 			}
-			loadbar(internalCounter, progressCounter, beginClock);
+			loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 			//Increment counter
 			internalCounter++;
 		}
 
-		loadbar(progressCounter, progressCounter, beginClock);
+		loadbar(progressCounter, progressCounter, beginClock, bPMem, bVMem);
 		clock_t finalEndClock = clock();
 
 		//Get Finish Memory (Virtual, Physical)

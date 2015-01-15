@@ -73,6 +73,22 @@ string convertMemoryToHumanReadable(SIZE_T bytes){
 	return ss.str();
 }
 
+/*
+Converts Bytes to KB w/o bytes in brackets
+@param bytes Bytes to convert
+@return String of properly formatted code
+*/
+string convertMemoryToHumanReadableSht(SIZE_T bytes){
+	stringstream ss;
+	if (bytes > 1048576)	//MB
+		ss << convertToMB(bytes) << " MB";
+	else if (bytes > 1024)	//KB
+		ss << convertToKB(bytes) << " KB";
+	else					//Bytes
+		ss << bytes << " B";
+	return ss.str();
+}
+
 void printMemoryInfo(){
 	cout << endl;
 	cout << yellow << "====================================================" << white << endl;
