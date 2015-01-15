@@ -12,6 +12,7 @@
 #include "Memory.h"
 #include <iomanip>		//std::setw
 #include <sstream>		//String Stream
+#include <vector>		//Vector
 #define CONSOLE_WINDOW_SIZE 78
 
 namespace ptrarr {
@@ -34,6 +35,6 @@ namespace ptrarr {
 	void listTopWords(List &list);
 	void removeMusicInfo(List &list);
 	void printStats();
-	void makeGraph();
+	void makeTimeGraph();
 	int mainLoop();
 }

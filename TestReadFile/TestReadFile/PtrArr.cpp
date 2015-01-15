@@ -14,6 +14,11 @@ namespace ptrarr {
 	SIZE_T addMVTime = -1, addWVTime = -1, addLVTime = -1, displayMVTime = -1, displayWVTime = -1, sequSearchVTime = -1, removeVTime = -1;	//Virtual Mem
 	SIZE_T addMPTime = -1, addWPTime = -1, addLPTime = -1, displayMPTime = -1, displayWPTime = -1, sequSearchPTime = -1, removePTime = -1;	//Physical Mem
 
+	//Array Logger
+	vector<double> timingMCounter;
+	vector<double> timingLCounter;
+	vector<double> timingWCounter(5000);
+
 	/*
 	Color Legend
 	Yellow - Progress Bar/Status Message
@@ -109,6 +114,7 @@ namespace ptrarr {
 		settextcolor(cyan);
 		int count;
 		cin >> count;
+		timingMCounter.resize(count);
 		printSeperator();
 		cout << red << "                             Parsing Text Files..." << endl;
 		printSeperator();
@@ -117,6 +123,7 @@ namespace ptrarr {
 		cout << pink << "How many lines to read in Lyric Count File? (-1 to read all): ";
 		settextcolor(cyan);
 		cin >> count;
+		timingLCounter.resize(count);
 		readSongLyricCount(lyricList, count);
 		printSeperator();
 		cout << red << "                                Parse Completed" << endl;
@@ -162,6 +169,7 @@ namespace ptrarr {
 						cout << topwrd << endl;
 
 					list.add(topwrd);
+					timingWCounter[internalCounter] = calculateElapsed(beginClock, clock());
 					loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 					//Increment counter
 					internalCounter++;
@@ -233,6 +241,7 @@ namespace ptrarr {
 				if (internalCounter >= progressCounter) break;
 
 				list.add(str);
+				timingLCounter[internalCounter] = calculateElapsed(beginClock, clock());
 				loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 				//Increment counter
 				internalCounter++;
@@ -304,6 +313,7 @@ namespace ptrarr {
 				//Parse Music Details Line
 				list.add(str);
 			}
+			timingMCounter[internalCounter] = calculateElapsed(beginClock, clock());
 			loadbar(internalCounter, progressCounter, beginClock, bPMem, bVMem);
 			//Increment counter
 			internalCounter++;
@@ -700,26 +710,25 @@ namespace ptrarr {
 
 	/*
 	Make a Graph with x axis being the length of the list and the y axis being time taken
-	A line for display, add, remove and stuff
 	@param musicList List of Music Data
 	@param wordList List of Word Data
 	@param lyricList List of Lyric Data
 	*/
-	void makeGraph(){
+	void makeTimeGraph(){
 		List ptrArrList;
 		//Make Graph for Lyric and get string
-		Graph lycG("Unsorted Pointer-based List Lyrics", addLElapsed, 0, 0, 0, 0);
+		Graph lycG("Unsorted Pointer-based List Lyrics", timingLCounter.size(), timingLCounter);
 		string lycGStr = lycG.createGraphString();
 		ptrArrList.add(lycGStr);
 		//Make Graph for Songs
-		Graph sonG("Unsorted Pointer-based List Song Data", addMElapsed, removeElapsed, displayMElapsed, sequSearchElapsed, 0);
+		Graph sonG("Unsorted Pointer-based List Song Data", timingMCounter.size(), timingMCounter);
 		string sonGStr = sonG.createGraphString();
 		ptrArrList.add(sonGStr);
 		//Make Graph for Words
-		Graph wrdG("Unsorted Pointer-based List Top Lyric Words", addLElapsed, 0, displayWElapsed, 0, 0);
+		Graph wrdG("Unsorted Pointer-based List Top Lyric Words", timingWCounter.size(), timingWCounter);
 		string wrdGStr = wrdG.createGraphString();
 		ptrArrList.add(wrdGStr);
-		plotGraph(ptrArrList);
+		plotGraph(ptrArrList, "Add into list Timings Graph");
 	}
 
 	/*

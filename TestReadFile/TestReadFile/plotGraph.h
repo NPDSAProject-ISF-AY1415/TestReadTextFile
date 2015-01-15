@@ -5,4 +5,6 @@
 #include "concol.h"
 #include <iostream>
 
+//DEPRECRATED. USE SECOND
 int plotGraph(List &graphList);
+int plotGraph(List &graphList, string title);

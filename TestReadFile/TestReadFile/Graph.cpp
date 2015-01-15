@@ -7,26 +7,50 @@ using namespace std;
 //0 - Add, 1 - Remove, 2-Display, 3-Sequential Search, 4-Binary Search
 
 
-Graph::Graph(string title, double add, double remove, double display, double seqSearch, double binSearch){
+Graph::Graph(string title, vector<double> x, vector<double> y){
 	this->title = title;
-	this->yValues[0] = add;
-	this->yValues[1] = remove;
-	this->yValues[2] = display;
-	this->yValues[3] = seqSearch;
-	this->yValues[4] = binSearch;
-}
-void Graph::setTitle(string title){ this->title = title; }
-string Graph::getTitle(){ return this->title; }
-void Graph::setValues(double add, double remove, double display, double seqSearch, double binSearch){
-	this->yValues[0] = add;
-	this->yValues[1] = remove;
-	this->yValues[2] = display;
-	this->yValues[3] = seqSearch;
-	this->yValues[4] = binSearch;
+	this->xValues = x;
+	this->yValues = y;
 }
 
-double* Graph::getValues(){
+Graph::Graph(string title, int xCt, vector<double> y){
+	this->title = title;
+	this->yValues = y;
+	this->xValues.resize(xCt);
+	for (int i = 0; i < this->xValues.size(); i++){
+		this->xValues[i] = (i + 1);
+	}
+}
+
+void Graph::setTitle(string title){ this->title = title; }
+string Graph::getTitle(){ return this->title; }
+void Graph::setValues(vector<double> x, vector<double> y){
+	this->xValues = x;
+	this->yValues = y;
+}
+
+void Graph::addValues(double x, double y){
+	int newSize = this->xValues.size() + 1;
+	this->xValues.resize(newSize);
+	this->xValues.resize(newSize);
+	this->xValues[newSize - 1] = x;
+	this->yValues[newSize - 1] = y;
+}
+
+vector<double> Graph::getXValueArr(){
+	return this->xValues;
+}
+
+vector<double> Graph::getYValueArr(){
 	return this->yValues;
+}
+
+double Graph::getXValue(int index){
+	return this->xValues[index];
+}
+
+double Graph::getYValue(int index){
+	return this->yValues[index];
 }
 
 void Graph::printValues(){
@@ -37,14 +61,18 @@ void Graph::printValues(){
 	cout << endl;
 }
 string Graph::createGraphString(){
-	//Format: title,y0,y1,y2,y3,y4,y5
+	//Format: title,len,x0:y0,x1:y1,....
 	ostringstream s;
 	string createdStr;
 	if (this->title != "")
 		s << this->title;
 	else
 		s << "NULL";
-	s << "," << this->yValues[0] << "," << this->yValues[1] << "," << this->yValues[2] << "," << this->yValues[3] << "," << this->yValues[4];
+	s << "," << this->xValues.size();
+	for (int i = 0; i < this->xValues.size(); i++)
+		s << "," << this->xValues[i] << ":" << this->yValues[i];
+
+	//cout << "DEBUG: " << s.str() << endl;
 	return s.str();
 }
 
@@ -52,23 +80,41 @@ Graph Graph::createGraphObjFromString(string str){
 	istringstream stream(str);
 	string token;
 	int tokenCt = 0;
-
+	
+	//cout << "String: " << str << endl;
 	//Temp Var
 	string title;
-	double add, del, dis, ss, bs;
+	vector<double> x;
+	vector<double> y;
+	int counter = 0;
 	while (getline(stream, token, ',')){
-		switch (tokenCt)
-		{
-		case 0: title = token;  break;
-		case 1: add = stod(token); break;
-		case 2: del = stod(token); break;
-		case 3: dis = stod(token); break;
-		case 4: ss = stod(token); break;
-		case 5: bs = stod(token); break;
+		if (tokenCt == 0)
+			title = token;
+		else if (tokenCt == 1){
+			//Set Lengths of Array
+			x.resize(stoi(token));
+			y.resize(stoi(token));
+		}
+		else {
+			//Add Values (Split into :)
+			stringstream subStr(token);
+			string xAndY;
+			bool first = true;
+			while (getline(subStr, xAndY, ':')){
+				if (first){
+					first = false;
+					x[counter] = stod(xAndY);
+				}
+				else {
+					y[counter] = stod(xAndY);
+				}
+			}
+			//cout << "LEL: " << x[counter] << ":" << y[counter] << ", ";
+			counter++;
 		}
 		tokenCt++;
 	}
 
-	Graph newG(title, add, del, dis, ss, bs);
+	Graph newG(title, x, y);
 	return newG;
 }
