@@ -17,9 +17,8 @@ void mainMenu(){
 	printSeperator();
 	settextcolor(white);
 	cout << "1) " << yellow << "Unsorted Pointer-Based Array" << white << endl;
-	cout << "2) " << yellow << "View Performance Statistics" << white << endl;
+	cout << "2) " << yellow << "Performance Utilities" << white << endl;
 	cout << "3) " << yellow << "Plot Performance Graphs" << white << endl;
-	cout << "4) " << yellow << "View Program Memory Usage" << white << endl;
 	cout << "0) " << yellow << "Quit" << white << endl;
 }
 
@@ -45,9 +44,8 @@ int main(){
 			switch (stoi(selection))
 			{
 			case 1: menErr = ptrarr::mainLoop(); break;
-			case 2: ptrarr::printStats(); break;
+			case 2: ptrarr::performanceMenu(); break;
 			case 3: ptrarr::plotGraphMenu(); break;
-			case 4: printMemoryInfo(); break;
 			case 0: return 0;
 				//case 4: mainList.print(); break;
 			default: cout << dark_red << "Invalid Selection." << endl; break;

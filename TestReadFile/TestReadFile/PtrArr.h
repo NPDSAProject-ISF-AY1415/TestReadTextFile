@@ -68,6 +68,7 @@ namespace ptrarr {
 	void makeRemoveTimeGraph();
 	void makeSeqSearchTimeGraph();
 	void plotGraphMenu();
+	void performanceMenu();
 	int mainLoop();
 }
 

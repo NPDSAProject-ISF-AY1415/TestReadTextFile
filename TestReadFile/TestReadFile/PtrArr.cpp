@@ -926,6 +926,7 @@ namespace ptrarr {
 		settextcolor(white);
 		cout << "1) " << yellow << "View Performance Statistics" << white << endl;
 		cout << "2) " << yellow << "View Program Memory Usage" << white << endl;
+		cout << "0) " << yellow << "Go Back" << white << endl;
 		string selection;
 		cout << pink << "Select an option: ";
 		getStringInput(selection);
