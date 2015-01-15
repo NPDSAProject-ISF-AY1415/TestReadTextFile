@@ -7,12 +7,12 @@ using namespace utility;
 namespace ptrarr {
 	int musicInfoFileLength = 779074;
 	//All the counters
-	double addMElapsed = 0, addWElapsed = 0, addLElapsed = 0, displayMElapsed = 0, displayWElapsed = 0, sequSearchElapsed = 0;
-	double removeElapsed = 0;
+	double addMElapsed = -1, addWElapsed = -1, addLElapsed = -1, displayMElapsed = -1, displayWElapsed = -1, sequSearchElapsed = -1;
+	double removeElapsed = -1;
 
 	//Memory Counters
-	SIZE_T addMVTime = 0, addWVTime = 0, addLVTime = 0, displayMVTime = 0, displayWVTime = 0, sequSearchVTime = 0, removeVTime = 0;	//Virtual Mem
-	SIZE_T addMPTime = 0, addWPTime = 0, addLPTime = 0, displayMPTime = 0, displayWPTime = 0, sequSearchPTime = 0, removePTime = 0;	//Physical Mem
+	SIZE_T addMVTime = -1, addWVTime = -1, addLVTime = -1, displayMVTime = -1, displayWVTime = -1, sequSearchVTime = -1, removeVTime = -1;	//Virtual Mem
+	SIZE_T addMPTime = -1, addWPTime = -1, addLPTime = -1, displayMPTime = -1, displayWPTime = -1, sequSearchPTime = -1, removePTime = -1;	//Physical Mem
 
 	/*
 	Color Legend
@@ -314,11 +314,11 @@ namespace ptrarr {
 	}
 
 	/*
-	Prints out the main pointer-based array menu
+	Prints out the main pointer-based list menu
 	*/
 	void mainPtrArrMenu(){
 		printSeperator();
-		cout << red << "                        Main Pointer-based Array Menu" << endl;
+		cout << red << "                        Main Pointer-based List Menu" << endl;
 		printSeperator();
 		settextcolor(white);
 		cout << "1) " << yellow << "View Songs in Database" << white << endl;
@@ -348,6 +348,10 @@ namespace ptrarr {
 		settextcolor(white);
 
 		clock_t start = clock();
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		bool found = false;
 		for (int i = 1; i <= list.getLength(); i++){
 			string res = list.get(i);
@@ -365,8 +369,18 @@ namespace ptrarr {
 			cout << endl << dark_red << "Unable to find a music file matching the search term" << endl;
 		}
 		clock_t end = clock();
+
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		sequSearchPTime = (ePMem - bPMem);
+		sequSearchVTime = (eVMem - bVMem);
+
 		sequSearchElapsed = calculateElapsed(start, end);
 		cout << yellow << "Elapsed Time for Sequential Search: " << cyan << setprecision(2) << fixed << sequSearchElapsed << " seconds." << endl;
+		cout << yellow << "Page Memory Use Changes: " << cyan << convertMemoryToHumanReadable(sequSearchVTime) << endl;
+		cout << yellow << "RAM Use Changes: " << cyan << convertMemoryToHumanReadable(sequSearchPTime) << endl << endl;
 	}
 
 	/*
@@ -379,6 +393,10 @@ namespace ptrarr {
 		printSeperator();
 
 		clock_t start = clock();
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		for (int i = 1; i <= list.getLength(); i++){
 			string res = list.get(i);
 			Music musIfo = parseMusicItem(res);
@@ -389,8 +407,18 @@ namespace ptrarr {
 			cout << yellow << "=========================================================" << endl;
 		}
 		clock_t end = clock();
+
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		displayMPTime = (ePMem - bPMem);
+		displayMVTime = (eVMem - bVMem);
+
 		displayMElapsed = calculateElapsed(start, end);
 		cout << yellow << "Elapsed Time for displaying songs: " << cyan << setprecision(2) << fixed << displayMElapsed << " seconds." << endl;
+		cout << yellow << "Page Memory Use Changes: " << cyan << convertMemoryToHumanReadable(displayMVTime) << endl;
+		cout << yellow << "RAM Use Changes: " << cyan << convertMemoryToHumanReadable(displayMPTime) << endl << endl;
 	}
 
 	/* Option 4: Display List of Top Words in Lyrics 
@@ -403,6 +431,10 @@ namespace ptrarr {
 		int modder = 1;		//To split print every 6 lines
 
 		clock_t start = clock();
+		//Get Start Memory (Virtual, Physical)
+		SIZE_T bVMem = getVMUsed();
+		SIZE_T bPMem = getPMUsed();
+
 		for (int i = 1; i <= list.getLength(); i++){
 			if (modder % 6 == 0){
 				cout << endl;
@@ -414,8 +446,18 @@ namespace ptrarr {
 		}
 		cout << endl;
 		clock_t end = clock();
+
+		//Get Finish Memory (Virtual, Physical)
+		SIZE_T eVMem = getVMUsed();
+		SIZE_T ePMem = getPMUsed();
+		//Calculate Memory Used (Virtual, Physical)
+		displayWPTime = (ePMem - bPMem);
+		displayWVTime = (eVMem - bVMem);
+
 		displayWElapsed = calculateElapsed(start, end);
 		cout << yellow << "Elapsed Time for displaying top words in lyrics: " << cyan << setprecision(2) << fixed << displayWElapsed << " seconds." << endl;
+		cout << yellow << "Page Memory Use Changes: " << cyan << convertMemoryToHumanReadable(displayWVTime) << endl;
+		cout << yellow << "RAM Use Changes: " << cyan << convertMemoryToHumanReadable(displayWPTime) << endl << endl;
 	}
 
 	/*
@@ -451,11 +493,25 @@ namespace ptrarr {
 		if (confirm[0] == 'y' || confirm[0] == 'Y'){
 			//Confirmed Remove
 			clock_t start = clock();
+			//Get Start Memory (Virtual, Physical)
+			SIZE_T bVMem = getVMUsed();
+			SIZE_T bPMem = getPMUsed();
+
 			list.remove(stoi(indexToRemove));
 			cout << green << "Music Data (" << toRemove.getMTitle() << ") has been removed from the list!" << endl;
 			clock_t end = clock();
+
+			//Get Finish Memory (Virtual, Physical)
+			SIZE_T eVMem = getVMUsed();
+			SIZE_T ePMem = getPMUsed();
+			//Calculate Memory Used (Virtual, Physical)
+			removePTime = (ePMem - bPMem);
+			removeVTime = (eVMem - bVMem);
+
 			removeElapsed = calculateElapsed(start, end);
 			cout << yellow << "Elapsed Time for removing music: " << cyan << setprecision(2) << fixed << removeElapsed << " seconds." << endl;
+			cout << yellow << "Page Memory Use Changes: " << cyan << convertMemoryToHumanReadable(removeVTime) << endl;
+			cout << yellow << "RAM Use Changes: " << cyan << convertMemoryToHumanReadable(removePTime) << endl << endl;
 		}
 		else {
 			cout << green << "Cancelled Removal of Music Data from list" << endl;
@@ -468,11 +524,11 @@ namespace ptrarr {
 	void printStats(){
 		//Timings (Sequence 40 | 37)
 		printSeperator();
-		cout << red <<"                    Pointer-based Array Statistics (Timings)" << endl;
+		cout << red <<"                     Pointer-based List Statistic (Timings)" << endl;
 		printSeperator();
 		//Add Music
 		cout << red << "               Add (Music)              " << yellow << "|        " << cyan;
-		if (addMElapsed != 0)
+		if (addMElapsed != -1)
 			cout << setprecision(2) << fixed << addMElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -480,7 +536,7 @@ namespace ptrarr {
 
 		//Add Music
 		cout << red << "               Add (Words)              " << yellow << "|        " << cyan;
-		if (addWElapsed != 0)
+		if (addWElapsed != -1)
 			cout << setprecision(2) << fixed << addWElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -488,7 +544,7 @@ namespace ptrarr {
 
 		//Add Lyric
 		cout << red << "               Add (Lyric)              " << yellow << "|        " << cyan;
-		if (addLElapsed != 0)
+		if (addLElapsed != -1)
 			cout << setprecision(2) << fixed << addLElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -496,7 +552,7 @@ namespace ptrarr {
 
 		//Display Music
 		cout << red << "             Display (Music)            " << yellow << "|        " << cyan;
-		if (displayMElapsed != 0)
+		if (displayMElapsed != -1)
 			cout << setprecision(2) << fixed << displayMElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -504,7 +560,7 @@ namespace ptrarr {
 
 		//Display Top Words
 		cout << red << "           Display (Top Words)          " << yellow << "|        " << cyan;
-		if (displayWElapsed != 0)
+		if (displayWElapsed != -1)
 			cout << setprecision(2) << fixed << displayWElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -512,7 +568,7 @@ namespace ptrarr {
 
 		//Remove
 		cout << red << "               Remove Item              " << yellow << "|        " << cyan;
-		if (removeElapsed != 0)
+		if (removeElapsed != -1)
 			cout << setprecision(2) << fixed << removeElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -520,7 +576,7 @@ namespace ptrarr {
 
 		//Seq Search
 		cout << red << "            Sequential Search           " << yellow << "|        " << cyan;
-		if (sequSearchElapsed != 0)
+		if (sequSearchElapsed != -1)
 			cout << setprecision(2) << fixed << sequSearchElapsed << " Seconds ";
 		else
 			cout << "  Untested ";
@@ -528,19 +584,19 @@ namespace ptrarr {
 
 		printSeperator();
 		//Memory (Sequence 26 | 25 | 25)
-		cout << red << "                   Pointer-based Array Statistics (Mem Usage)" << endl;
+		cout << red << "              Pointer-based List Statistics (Memory Usage Changes)" << endl;
 		printSeperator();
 		cout << red << "        Operation         " << yellow << "|" << red << "         RAM Use         " << yellow << "|" << red << "  V.Mem Use (Page File)  " << endl;
 		printSeperator();
 		//Add Music
 		cout << red << "       Add (Music)        " << yellow << "|" << cyan;
-		if (addMPTime != 0)
+		if (addMPTime != -1)
 			//cout << "   " << convertMemoryToHumanReadable(addMPTime) << "    ";
 			cout << centerString(convertMemoryToHumanReadable(addMPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (addMVTime != 0)
+		if (addMVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(addMVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -548,12 +604,12 @@ namespace ptrarr {
 
 		//Add Words
 		cout << red << "       Add (Words)        " << yellow << "|" << cyan;
-		if (addWPTime != 0)
+		if (addWPTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(addWPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (addWVTime != 0)
+		if (addWVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(addWVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -561,12 +617,12 @@ namespace ptrarr {
 
 		//Add Lyric
 		cout << red << "       Add (Lyric)        " << yellow << "|" << cyan;
-		if (addLPTime != 0)
+		if (addLPTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(addLPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (addLVTime != 0)
+		if (addLVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(addLVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -574,12 +630,12 @@ namespace ptrarr {
 
 		//Display Music
 		cout << red << "     Display (Music)      " << yellow << "|" << cyan;
-		if (displayMPTime != 0)
+		if (displayMPTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(displayMPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (displayMVTime != 0)
+		if (displayMVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(displayMVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -587,12 +643,12 @@ namespace ptrarr {
 
 		//Display Top Words
 		cout << red << "   Display (Top Words)    " << yellow << "|" << cyan;
-		if (displayWPTime != 0)
+		if (displayWPTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(displayWPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (displayWVTime != 0)
+		if (displayWVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(displayWVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -600,12 +656,12 @@ namespace ptrarr {
 
 		//Remove
 		cout << red << "       Remove Item        " << yellow << "|" << cyan;
-		if (removePTime != 0)
+		if (removePTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(removePTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (removeVTime != 0)
+		if (removeVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(removeVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -613,12 +669,12 @@ namespace ptrarr {
 
 		//Seq Search
 		cout << red << "    Sequential Search     " << yellow << "|" << cyan;
-		if (sequSearchPTime != 0)
+		if (sequSearchPTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(sequSearchPTime).c_str(), 25);
 		else
 			cout << "        Untested         ";
 		cout << yellow << "|" << cyan;
-		if (sequSearchVTime != 0)
+		if (sequSearchVTime != -1)
 			cout << centerString(convertMemoryToHumanReadable(sequSearchVTime).c_str(), 25);
 		else
 			cout << "        Untested";
@@ -636,22 +692,22 @@ namespace ptrarr {
 	void makeGraph(){
 		List ptrArrList;
 		//Make Graph for Lyric and get string
-		Graph lycG("Unsorted Pointer-based Array Lyrics", addLElapsed, 0, 0, 0, 0);
+		Graph lycG("Unsorted Pointer-based List Lyrics", addLElapsed, 0, 0, 0, 0);
 		string lycGStr = lycG.createGraphString();
 		ptrArrList.add(lycGStr);
 		//Make Graph for Songs
-		Graph sonG("Unsorted Pointer-based Array Song Data", addMElapsed, removeElapsed, displayMElapsed, sequSearchElapsed, 0);
+		Graph sonG("Unsorted Pointer-based List Song Data", addMElapsed, removeElapsed, displayMElapsed, sequSearchElapsed, 0);
 		string sonGStr = sonG.createGraphString();
 		ptrArrList.add(sonGStr);
 		//Make Graph for Words
-		Graph wrdG("Unsorted Pointer-based Array Top Lyric Words", addLElapsed, 0, displayWElapsed, 0, 0);
+		Graph wrdG("Unsorted Pointer-based List Top Lyric Words", addLElapsed, 0, displayWElapsed, 0, 0);
 		string wrdGStr = wrdG.createGraphString();
 		ptrArrList.add(wrdGStr);
 		plotGraph(ptrArrList);
 	}
 
 	/*
-	Main Pointer Based Array Code
+	Main Pointer Based List Code
 	@return Error Code (-1 for continue)
 	*/
 	int mainLoop(){
