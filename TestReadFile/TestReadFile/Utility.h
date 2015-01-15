@@ -8,6 +8,7 @@
 #include "Music.h"
 #include <iostream>		//String
 #include <fstream>		//File Reading
+#include <sstream>		//String Stream
 
 using namespace std;
 
@@ -18,5 +19,6 @@ namespace utility{
 	Music parseMusicItem(string music);
 	void printAscii();
 	void getStringInput(string &storein);
+	string centerString(char* s, int size);
 }
 #endif

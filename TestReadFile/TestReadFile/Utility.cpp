@@ -73,12 +73,31 @@ namespace utility {
 
 	/*
 	Get Input from String
-	@params storein Stores the input into this string
+	@param storein Stores the input into this string
 	*/
 	void getStringInput(string &storein){
 		settextcolor(cyan);
 		cin >> storein;
 		settextcolor(white);
+	}
+
+	/*
+	Centers a string
+	@param s String to center
+	@param size Size of String to figure out what to center
+	@return Centered String
+	*/
+	string centerString(char* s, int size){
+		int len = strlen(s);
+		int pos = (int)((size - len) / 2);
+		stringstream centeredStr;
+		for (int i = 0; i < pos; i++)
+			centeredStr << " ";
+		centeredStr << s;
+		int fillOutRemaining = size - pos - len;
+		for (int i = 0; i < fillOutRemaining; i++)
+			centeredStr << " ";
+		return centeredStr.str();
 	}
 
 }
