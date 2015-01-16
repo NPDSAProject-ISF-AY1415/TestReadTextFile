@@ -1,4 +1,4 @@
-# TestReadTextFile
+# TestReadTextFile (DEPRECRATED)
 A test to read text files.  
 This is basically a repo to code that reads a file from a text file and stores it in a pointer-based array
 
